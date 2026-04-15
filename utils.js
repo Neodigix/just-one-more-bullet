@@ -18,3 +18,7 @@ function normalizeVector(vector) {
   const length =  Math.sqrt((vector[0] * vector[0]) + (vector[1] * vector[1]));
   return [vector[0] / length, vector[1] / length];
 }
+
+function getDistance(x1, y1, x2, y2) {
+  return Math.sqrt(((x1-x2)*(x1-x2))+((y1-y2)*(y1-y2)));
+}

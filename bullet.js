@@ -52,6 +52,7 @@ class Bullet {
   }
   checkCollision() {
     if (this.getPlayerDistance() <= 28) {
+      player.hp -= 1;
       this.isAlive = false;
     }
     for (let i = 0; i < enemies.length; i++) {

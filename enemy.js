@@ -38,7 +38,7 @@ class Enemy {
   }
   checkCollision() {
     if (this.getPlayerDistance() <= 48) {
-      console.log('eaten!');
+      player.hp -= 1;
       this.isAlive = false;
     }
   }
