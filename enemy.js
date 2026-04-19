@@ -4,6 +4,7 @@ class Enemy {
     this.y = y;
     this.speed = speed;
     this.isAlive = true;
+    this.danger = 1;
   }
   updatePosition(deltaTime) {
     const direction = [
@@ -41,5 +42,28 @@ class Enemy {
       player.hp -= 1;
       this.isAlive = false;
     }
+  }
+  hitByBullet(bullet) {
+    
+  }
+}
+
+class SolidEnemy extends Enemy{
+  constructor(x, y, speed) {
+    super(x, y, speed)
+    this.danger = 2;
+  }
+  draw(ctx) {
+    const pos = convertPosToCanvas(this.x, this.y);
+    ctx.fillStyle = 'blue';
+    ctx.beginPath();
+    ctx.arc(
+      pos[0],  // x
+      pos[1],  // y
+      25*scale,  // radius
+      0,  // starting angle
+      2 * Math.PI  // ending angle
+    )
+    ctx.fill();
   }
 }

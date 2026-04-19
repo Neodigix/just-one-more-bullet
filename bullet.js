@@ -31,7 +31,7 @@ class Bullet {
   }
   draw(ctx) {
     const pos = convertPosToCanvas(this.x, this.y);
-    ctx.fillStyle = 'red';
+    ctx.fillStyle = colors.bullet;
     ctx.beginPath();
     ctx.arc(
       pos[0],  // x

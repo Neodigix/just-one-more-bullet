@@ -1,11 +1,8 @@
-const version = '0.0.1'
+const version = '0.0.2'
 const gameCanvas = document.getElementById('gameCanvas');
 const ctx = gameCanvas.getContext('2d');
 
-// menu, game, death
-let gameState = 'menu';
 let transferDelay = 20;
-let wave = 0;
 
 // ResizegameCanvas to fill screen
 let offsetX = 0;
@@ -38,7 +35,7 @@ gameCanvas.addEventListener('click', function(event) {
   const x = event.clientX - rect.left;
   const y = event.clientY - rect.top;
   const pos = convertPosFromCanvas(x, y);
-  if (gameState == 'game') {
+  if (gameVars.gameState == 'game') {
     let dirVector = [pos[0]-player.x, pos[1]-player.y];
     dirVector = normalizeVector(dirVector);
     // TODO safe add
@@ -48,7 +45,7 @@ gameCanvas.addEventListener('click', function(event) {
     ], dirVector, 400)
      bullets.push(newBullet);
   }
-  else if (gameState == 'menu') {
+  else if (gameVars.gameState == 'menu') {
     for (let i = 0; i < menuButtons.length; i++){
       const button = menuButtons[i];
       if (button.isHovered() && button.onClickFunction !== null) {
@@ -56,7 +53,7 @@ gameCanvas.addEventListener('click', function(event) {
       }
     }
   }
-  else if (gameState == 'death') {
+  else if (gameVars.gameState == 'death') {
     if (deathButton.isHovered()) {
       deathButton.onClickFunction();
     }
@@ -108,6 +105,18 @@ function update(deltaTime) {
     speedVector = normalizeVector(speedVector);
     player.x += speedVector[0] * player.speed * deltaTime;
     player.y += speedVector[1] * player.speed * deltaTime;
+    if (player.x < player.size / 2) {
+      player.x = player.size / 2;
+    }
+    else if (player.x > 1000 - (player.size / 2)) {
+      player.x = 1000 - (player.size / 2);
+    }
+    if (player.y < player.size / 2) {
+      player.y = player.size / 2;
+    }
+    else if (player.y > 1000 - (player.size / 2)) {
+      player.y = 1000 - (player.size / 2);
+    }
   }
   
   let newBullets = [];
@@ -150,7 +159,7 @@ function draw() {
 let enemyTime = 3;
 
 function gameLoop(timestamp) {
-  if (gameState == 'game') {
+  if (gameVars.gameState == 'game') {
     const deltaTime = (timestamp - lastUpdate) / 1000;
     if (transferDelay > 0) {
       transferDelay -= deltaTime;
@@ -164,39 +173,27 @@ function gameLoop(timestamp) {
     
       enemyTime -= deltaTime;
       if (enemyTime < 0) {
-        wave += 1;
-        const enemiesCount = wave;
+        gameVars.wave += 1;
+        const enemiesCount = gameVars.wave;
         for (let i = 0; i < enemiesCount; i++){
-          let enemyX = Math.random() * 1000;
-          let enemyY = Math.random() * 1000;
-          while (getDistance(enemyX, enemyY, player.x, player.y) < 150) {
-            enemyX = Math.random() * 1000;
-            enemyY = Math.random() * 1000;
-          }
-          enemies.push(
-            new Enemy(
-              enemyX,
-              enemyY,
-              40
-            )
-          )
-          enemyTime = 5;
+          generateWave(gameVars.wave);
+          enemyTime = getNextWaveTime(gameVars.wave);
         }
       }
       drawUI(ctx);
     }
   }
-  else if (gameState == 'menu') {
+  else if (gameVars.gameState == 'menu') {
     const deltaTime = (timestamp - lastUpdate) / 1000;
     if (transferDelay > 0) {
       transferDelay -= deltaTime;
     }
     else {
       lastUpdate = timestamp;
-      drawMenu(ctx);
+      drawMenu(ctx, deltaTime);
     }
   }
-  else if (gameState == 'death') {
+  else if (gameVars.gameState == 'death') {
     const deltaTime = (timestamp - lastUpdate) / 1000;
     if (transferDelay > 0) {
       transferDelay -= deltaTime;
@@ -206,8 +203,8 @@ function gameLoop(timestamp) {
       drawDeath(ctx);
     }
   }
-  if (gameState == 'game' && player.hp <= 0) {
-    gameState = 'death';
+  if (gameVars.gameState == 'game' && player.hp <= 0) {
+    gameVars.gameState = 'death';
   }
   requestAnimationFrame(gameLoop);
 }
@@ -218,7 +215,7 @@ function resetGame() {
   player.hp = 3;
   bullets = [];
   enemies = [];
-  wave = 0;
+  gameVars.wave = 0;
 }
 
 requestAnimationFrame(gameLoop);
