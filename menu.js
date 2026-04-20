@@ -10,7 +10,7 @@ class MenuButton{
   draw(ctx) {
     ctx.fillStyle = 'grey';
     if (this.isHovered()) {
-      ctx.fillStyle = 'pink';
+      ctx.fillStyle = colors.menuButtonHover;
     }
     ctx.fillRect(
       uiOffsetX+(this.x*scale),
@@ -20,9 +20,10 @@ class MenuButton{
     );
     ctx.font = (40*scale)+ 'px Arial';
     ctx.fillStyle = 'yellow';
+    ctx.textAlign = 'center';
     ctx.fillText(
       this.text,
-      uiOffsetX + (this.x*scale) + (10*scale),
+      uiOffsetX + (this.x*scale) + ((this.width/2)*scale),
       offsetY + (this.y*scale) + ((this.height/2)*scale) + (20*scale)
     );
   }
@@ -39,33 +40,50 @@ class MenuButton{
   }
 }
 
+const menuBottonsOffset = 300;
 const menuButtons = [
   new MenuButton(
-    10, 10, 500, 100,
-    'Start game',
+    600-250, 10+menuBottonsOffset, 500, 100,
+    'START GAME',
     function () {
       resetGame();
       transferDelay = 20;
-      gameState = 'game';
+      gameVars.gameState = 'game';
     }
   ),
   new MenuButton(
-    10, 10+150, 500, 100,
-    'Credits',
+    600-250, 10+150+menuBottonsOffset, 500, 100,
+    'CREDITS',
   )
 ]
 
-function drawMenu(ctx) {
+function drawMenu(ctx, deltaTime) {
   // Remember that menu is 1200xw1000
   ctx.clearRect(0, 0,gameCanvas.width,gameCanvas.height);
   ctx.fillStyle = 'black';
   const topLeft = convertPosToCanvas(-200, 0);
   ctx.fillRect(topLeft[0], topLeft[1], convertDimToCanvas(1200), convertDimToCanvas(1000));
   
+  updateAndDrawMenuAnimation(ctx, deltaTime);
+  
+  // Game title
+  ctx.textAlign = 'center';
+  ctx.font = (40*scale)+ 'px Arial';
+  ctx.fillStyle = 'white';
+  ctx.fillText(
+    'Just One More Bullet',
+    uiOffsetX + (600*scale),
+    offsetY + (60*scale)
+  );
+  
+  // Buttons
   for (let i = 0; i < menuButtons.length; i++){
     const button = menuButtons[i];
     button.draw(ctx);
   }
+  
+  // Game version
+  ctx.textAlign = 'left';
   ctx.font = (40*scale)+ 'px Arial';
   ctx.fillStyle = 'white';
   ctx.fillText(

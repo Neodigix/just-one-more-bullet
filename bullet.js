@@ -6,32 +6,38 @@ class Bullet {
     this.speed = speed;
     this.distanceLeft = travelDistance;
     this.isAlive = true;
+    this.sleepIterations = 0;
   }
   updatePosition(deltaTime) {
     const speedVector = normalizeVector(this.direction);
     this.x += speedVector[0] * this.speed * deltaTime;
     this.y += speedVector[1] * this.speed * deltaTime;
     if (this.x < 0) {
-      this.x += 1000;
+      this.direction[0] = Math.abs(this.direction[0]);
     }
     else if (this.x > 1000) {
-      this.x -= 1000;
+      this.direction[0] = -Math.abs(this.direction[0]);
     }
     if (this.y < 0) {
-      this.y += 1000;
+      this.direction[1] = Math.abs(this.direction[1]);
     }
     else if (this.y > 1000) {
-      this.y -= 1000;
+      this.direction[1] = -Math.abs(this.direction[1]);
     }
     this.distanceLeft -= this.speed * deltaTime;
     if (this.distanceLeft <= 0) {
       this.isAlive = false;
     }
-    this.checkCollision();
+    if (this.sleepIterations > 0) {
+      this.sleepIterations -= 1; 
+    }
+    else {
+      this.checkCollision();
+    }
   }
   draw(ctx) {
     const pos = convertPosToCanvas(this.x, this.y);
-    ctx.fillStyle = 'red';
+    ctx.fillStyle = colors.bullet;
     ctx.beginPath();
     ctx.arc(
       pos[0],  // x
@@ -60,8 +66,7 @@ class Bullet {
       const xDistance2 = (this.x-enemy.x)*(this.x-enemy.x)
       const yDistance2 = (this.y-enemy.y)*(this.y-enemy.y)
       if (Math.sqrt(xDistance2 + yDistance2) < 28) {
-        enemy.isAlive = false;
-        this.isAlive = false;
+        enemy.hitByBullet(this);
       }
     }
   }
