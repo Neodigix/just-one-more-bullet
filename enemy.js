@@ -44,7 +44,8 @@ class Enemy {
     }
   }
   hitByBullet(bullet) {
-    
+    this.isAlive = false;
+    bullet.isAlive = false;
   }
 }
 
@@ -65,5 +66,19 @@ class SolidEnemy extends Enemy{
       2 * Math.PI  // ending angle
     )
     ctx.fill();
+  }
+  
+  hitByBullet(bullet) {
+    this.isAlive = false;
+    const newEnemy = new Enemy(this.x, this.y, 40);
+    enemiesToAdd.push(newEnemy);
+    
+    // Reflect bullet
+    const n = normalizeVector([bullet.x - this.x, bullet.y - this.y]);
+    const dot = bullet.direction[0] * n[0] + bullet.direction[1] * n[1];
+    bullet.direction[0] = bullet.direction[0] - 2 * dot * n[0];
+    bullet.direction[1] = bullet.direction[1] - 2 * dot * n[1];
+    bullet.direction = normalizeVector(bullet.direction);
+    bullet.sleepIterations = 1;
   }
 }

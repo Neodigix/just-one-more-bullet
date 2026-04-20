@@ -83,6 +83,7 @@ const player = {
 
 let bullets = [];
 let enemies = [];
+let enemiesToAdd = [];
 let shoot = false;
 
 // Input handling
@@ -137,6 +138,12 @@ function update(deltaTime) {
       newEnemies.push(enemy);
     }
   }
+  // Add enemies created during current frame
+  for (let i = 0; i < enemiesToAdd.length; i++) {
+    const enemy = enemiesToAdd[i];
+    newEnemies.push(enemy);
+  }
+  enemiesToAdd = [];
   enemies = newEnemies;
 }
 
