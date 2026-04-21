@@ -39,8 +39,11 @@ class Enemy {
   }
   checkCollision() {
     if (this.getPlayerDistance() <= 48) {
-      player.hp -= 1;
-      this.isAlive = false;
+      if(player.immortalityTime <= 0){
+        player.hp -= 1;
+        this.isAlive = false;
+        player.immortalityTime = 1000;
+      }
     }
   }
   hitByBullet(bullet) {
