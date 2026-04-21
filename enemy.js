@@ -18,7 +18,7 @@ class Enemy {
   }
   draw(ctx) {
     const pos = convertPosToCanvas(this.x, this.y);
-    ctx.fillStyle = 'yellow';
+    ctx.fillStyle = colors.enemy;
     ctx.beginPath();
     ctx.arc(
       pos[0],  // x
@@ -56,7 +56,7 @@ class SolidEnemy extends Enemy{
   }
   draw(ctx) {
     const pos = convertPosToCanvas(this.x, this.y);
-    ctx.fillStyle = 'blue';
+    ctx.fillStyle = colors.solidEnemy;
     ctx.beginPath();
     ctx.arc(
       pos[0],  // x

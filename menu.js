@@ -8,9 +8,9 @@ class MenuButton{
     this.onClickFunction = onClickFunction;
   }
   draw(ctx) {
-    ctx.fillStyle = 'grey';
+    ctx.fillStyle = colors.menuButtonBackground;
     if (this.isHovered()) {
-      ctx.fillStyle = colors.menuButtonHover;
+      ctx.fillStyle = colors.menuButtonBackgroundHover;
     }
     ctx.fillRect(
       uiOffsetX+(this.x*scale),
@@ -19,7 +19,7 @@ class MenuButton{
       this.height*scale,
     );
     ctx.font = (40*scale)+ 'px Arial';
-    ctx.fillStyle = 'yellow';
+    ctx.fillStyle = colors.menuButtonText;
     ctx.textAlign = 'center';
     ctx.fillText(
       this.text,
@@ -60,7 +60,7 @@ const menuButtons = [
 function drawMenu(ctx, deltaTime) {
   // Remember that menu is 1200xw1000
   ctx.clearRect(0, 0,gameCanvas.width,gameCanvas.height);
-  ctx.fillStyle = 'black';
+  ctx.fillStyle = colors.menuBackground;
   const topLeft = convertPosToCanvas(-200, 0);
   ctx.fillRect(topLeft[0], topLeft[1], convertDimToCanvas(1200), convertDimToCanvas(1000));
   
@@ -69,7 +69,7 @@ function drawMenu(ctx, deltaTime) {
   // Game title
   ctx.textAlign = 'center';
   ctx.font = (40*scale)+ 'px Arial';
-  ctx.fillStyle = 'white';
+  ctx.fillStyle = colors.menuGameTitle;
   ctx.fillText(
     'Just One More Bullet',
     uiOffsetX + (600*scale),
@@ -85,7 +85,7 @@ function drawMenu(ctx, deltaTime) {
   // Game version
   ctx.textAlign = 'left';
   ctx.font = (40*scale)+ 'px Arial';
-  ctx.fillStyle = 'white';
+  ctx.fillStyle = colors.menuGameVersion;
   ctx.fillText(
     'Game version: ' + version,
     uiOffsetX + (10*scale),

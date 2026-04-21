@@ -1,5 +1,5 @@
 function drawUI(ctx) {
-  ctx.fillStyle = 'grey'; 
+  ctx.fillStyle = colors.uiBackground;
   ctx.fillRect(
     uiOffsetX,
     offsetY,
@@ -8,9 +8,9 @@ function drawUI(ctx) {
   );
   
   ctx.font = (40*scale)+ 'px Arial';
-  ctx.fillStyle = 'yellow';
+  ctx.fillStyle = colors.uiWaveText;
   ctx.fillText('Wave: '+gameVars.wave, uiOffsetX+(5*scale), offsetY + (50 * scale));
-  ctx.fillStyle = 'red';
+  ctx.fillStyle = colors.uiHp;
   ctx.fillText('HP: ', uiOffsetX+(5*scale), offsetY + (100 * scale));
   for (let i = 0; i < player.hp; i++){
     ctx.fillRect(

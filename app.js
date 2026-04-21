@@ -149,7 +149,7 @@ function update(deltaTime) {
 
 function draw() {
   ctx.clearRect(0, 0,gameCanvas.width,gameCanvas.height);
-  ctx.fillStyle = 'black';
+  ctx.fillStyle = colors.gameBackground;
   const topLeft = convertPosToCanvas(0, 0);
   ctx.fillRect(topLeft[0], topLeft[1], convertDimToCanvas(1000), convertDimToCanvas(1000));
   
