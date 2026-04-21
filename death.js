@@ -9,13 +9,13 @@ const deathButton = new MenuButton(
 
 function drawDeath(ctx) {
   ctx.clearRect(0, 0,gameCanvas.width,gameCanvas.height);
-  ctx.fillStyle = 'black';
+  ctx.fillStyle = colors.deathBackground;
   const topLeft = convertPosToCanvas(-200, 0);
   ctx.fillRect(topLeft[0], topLeft[1], convertDimToCanvas(1200), convertDimToCanvas(1000));
   
   ctx.textAlign = 'center';
   ctx.font = (40*scale)+ 'px Arial';
-  ctx.fillStyle = 'yellow';
+  ctx.fillStyle = colors.deathText;
   ctx.fillText(
     'You are dead!',
     uiOffsetX + (600*scale),

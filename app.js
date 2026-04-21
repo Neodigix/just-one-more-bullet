@@ -1,4 +1,4 @@
-const version = '0.0.2'
+const version = '0.0.3'
 const gameCanvas = document.getElementById('gameCanvas');
 const ctx = gameCanvas.getContext('2d');
 
@@ -78,7 +78,8 @@ const player = {
   y: 500,
   hp: 3,
   size: 80,
-  speed: 200
+  speed: 200,
+  immortalityTime: 0 // In ms
 };
 
 let bullets = [];
@@ -149,7 +150,7 @@ function update(deltaTime) {
 
 function draw() {
   ctx.clearRect(0, 0,gameCanvas.width,gameCanvas.height);
-  ctx.fillStyle = 'black';
+  ctx.fillStyle = colors.gameBackground;
   const topLeft = convertPosToCanvas(0, 0);
   ctx.fillRect(topLeft[0], topLeft[1], convertDimToCanvas(1000), convertDimToCanvas(1000));
   
@@ -161,6 +162,11 @@ function draw() {
   for (let i = 0; i < enemies.length; i++){
     enemies[i].draw(ctx);
   }
+  ctx.beginPath();
+  ctx.strokeStyle = colors.gameBorder;
+  ctx.lineWidth = 3 * scale;
+  ctx.rect(topLeft[0], topLeft[1], convertDimToCanvas(1000), convertDimToCanvas(1000));
+  ctx.stroke();
 }
 
 let enemyTime = 3;
@@ -188,6 +194,9 @@ function gameLoop(timestamp) {
         }
       }
       drawUI(ctx);
+      if(player.immortalityTime > 0){
+        player.immortalityTime -= deltaTime * 1000;
+      }
     }
   }
   else if (gameVars.gameState == 'menu') {
