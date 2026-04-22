@@ -35,11 +35,7 @@ gameCanvas.addEventListener('click', function(event) {
     let dirVector = [pos[0]-player.x, pos[1]-player.y];
     dirVector = normalizeVector(dirVector);
     // TODO safe add
-    const newBullet = new Bullet([
-      player.x + dirVector[0]*30,
-      player.y + dirVector[1]*30
-    ], dirVector, 400)
-     bullets.push(newBullet);
+    player.gun.shoot(dirVector);
   }
   else if (gameVars.gameState == 'menu') {
     for (let i = 0; i < menuButtons.length; i++){
@@ -77,7 +73,8 @@ const player = {
   hp: 3,
   size: 80,
   speed: 200,
-  immortalityTime: 0 // In ms
+  immortalityTime: 0, // In ms
+  gun: new BasicPistol()
 };
 
 let bullets = [];

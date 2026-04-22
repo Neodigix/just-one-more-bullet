@@ -21,12 +21,7 @@ function drawPlayer(ctx) {
   const angle = Math.atan2(lookingVect[0], lookingVect[1]);
   
   ctx.save()
-  // Draw gun
-  ctx.translate(playerPos[0], playerPos[1]);
-  ctx.rotate(-angle);
-  ctx.fillStyle = colors.gun;
-  ctx.fillRect(-5*gameVars.scale, 20*gameVars.scale, 10 * gameVars.scale, 20 * gameVars.scale);
-  ctx.restore();
+  player.gun.draw(ctx)
 }
 
 function getLookingDirection() {

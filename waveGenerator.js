@@ -4,7 +4,7 @@ const enemiesClasses = [
 ];
 
 function generateWave(waveNum) {
-  const dangerLvl = Math.log(waveNum + 1) * 1;
+  const dangerLvl = Math.log(waveNum + 1) / 2;
   let currentDangerLvl = 0;
   while (currentDangerLvl < dangerLvl) {
     let enemyX = Math.random() * 1000;
