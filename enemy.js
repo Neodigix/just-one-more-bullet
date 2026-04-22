@@ -23,7 +23,7 @@ class Enemy {
     ctx.arc(
       pos[0],  // x
       pos[1],  // y
-      25*scale,  // radius
+      25*gameVars.scale,  // radius
       0,  // starting angle
       2 * Math.PI  // ending angle
     )
@@ -40,6 +40,8 @@ class Enemy {
   checkCollision() {
     if (this.getPlayerDistance() <= 48) {
       if(player.immortalityTime <= 0){
+        clickSound.currentTime = 0;
+        clickSound.play();
         player.hp -= 1;
         this.isAlive = false;
         player.immortalityTime = 1000;
@@ -64,7 +66,7 @@ class SolidEnemy extends Enemy{
     ctx.arc(
       pos[0],  // x
       pos[1],  // y
-      25*scale,  // radius
+      25*gameVars.scale,  // radius
       0,  // starting angle
       2 * Math.PI  // ending angle
     )

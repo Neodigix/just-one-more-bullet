@@ -6,7 +6,7 @@ function drawPlayer(ctx) {
   ctx.arc(
     playerPos[0],  // x
     playerPos[1],  // y
-    25*scale,  // radius
+    25*gameVars.scale,  // radius
     0,  // starting angle
     2 * Math.PI  // ending angle
   )
@@ -14,7 +14,7 @@ function drawPlayer(ctx) {
   if(player.immortalityTime > 0){
     ctx.fillStyle = colors.playerImmortal;
   }
-  ctx.lineWidth = 10 * scale;
+  ctx.lineWidth = 10 * gameVars.scale;
   ctx.fill();
   
   const lookingVect = getLookingDirection();
@@ -25,7 +25,7 @@ function drawPlayer(ctx) {
   ctx.translate(playerPos[0], playerPos[1]);
   ctx.rotate(-angle);
   ctx.fillStyle = colors.gun;
-  ctx.fillRect(-5*scale, 20*scale, 10 * scale, 20 * scale);
+  ctx.fillRect(-5*gameVars.scale, 20*gameVars.scale, 10 * gameVars.scale, 20 * gameVars.scale);
   ctx.restore();
 }
 

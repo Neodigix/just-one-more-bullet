@@ -1,17 +1,17 @@
 function convertPosFromCanvas(x, y) {
-  const xNoOffset = x - offsetX;
-  const yNoOffset = y - offsetY;
-  return [xNoOffset / scale, yNoOffset / scale];
+  const xNoOffset = x - gameVars.offsetX;
+  const yNoOffset = y - gameVars.offsetY;
+  return [xNoOffset / gameVars.scale, yNoOffset / gameVars.scale];
 }
 
 function convertPosToCanvas(x, y) {
-  const noOffsetX = x * scale;
-  const noOffsetY = y * scale;
-  return [noOffsetX + offsetX, noOffsetY + offsetY];
+  const noOffsetX = x * gameVars.scale;
+  const noOffsetY = y * gameVars.scale;
+  return [noOffsetX + gameVars.offsetX, noOffsetY + gameVars.offsetY];
 }
 
 function convertDimToCanvas(dimension) {
-  return dimension * scale;
+  return dimension * gameVars.scale;
 }
 
 function normalizeVector(vector) {

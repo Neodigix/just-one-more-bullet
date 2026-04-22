@@ -42,7 +42,7 @@ class Bullet {
     ctx.arc(
       pos[0],  // x
       pos[1],  // y
-      5*scale,  // radius
+      5*gameVars.scale,  // radius
       0,  // starting angle
       2 * Math.PI  // ending angle
     )
@@ -59,6 +59,8 @@ class Bullet {
   checkCollision() {
     if (this.getPlayerDistance() <= 28) {
       if(player.immortalityTime <= 0){
+        clickSound.currentTime = 0;
+        clickSound.play();
         player.hp -= 1;
         this.isAlive = false;
         player.immortalityTime = 1000;

@@ -2,29 +2,25 @@ const version = '0.0.3'
 const gameCanvas = document.getElementById('gameCanvas');
 const ctx = gameCanvas.getContext('2d');
 
-let transferDelay = 20;
+const clickSound = new Audio('click.wav');
 
 // ResizegameCanvas to fill screen
-let offsetX = 0;
-let uiOffsetX;
-let offsetY = 0;
-let scale = 1;
 function resizeCanvas() {
    gameCanvas.width = window.innerWidth;
    gameCanvas.height = window.innerHeight;
    if (gameCanvas.width > (gameCanvas.height*(1200/1000))) {
-     scale = gameCanvas.height / 1000;
-     const menuSize = 200 * scale;
-     offsetY = 0;
-     offsetX = ((gameCanvas.width - (1200 * scale))/2)+menuSize;
-     uiOffsetX = offsetX-menuSize;
+     gameVars.scale = gameCanvas.height / 1000;
+     const menuSize = 200 * gameVars.scale;
+     gameVars.offsetY = 0;
+     gameVars.offsetX = ((gameCanvas.width - (1200 * gameVars.scale))/2)+menuSize;
+     gameVars.uiOffsetX = gameVars.offsetX-menuSize;
    }
    else {
-     scale = gameCanvas.width / 1200;
-     const menuSize = 200 * scale;
-     offsetX = menuSize;
-     offsetY = (gameCanvas.height - (1000 * scale))/2;
-     uiOffsetX = offsetX-menuSize;
+     gameVars.scale = gameCanvas.width / 1200;
+     const menuSize = 200 * gameVars.scale;
+     gameVars.offsetX = menuSize;
+     gameVars.offsetY = (gameCanvas.height - (1000 * gameVars.scale))/2;
+     gameVars.uiOffsetX = gameVars.offsetX-menuSize;
    }
 }
 window.addEventListener('resize', resizeCanvas);
@@ -48,6 +44,8 @@ gameCanvas.addEventListener('click', function(event) {
   else if (gameVars.gameState == 'menu') {
     for (let i = 0; i < menuButtons.length; i++){
       const button = menuButtons[i];
+      clickSound.currentTime = 0;
+      clickSound.play();
       if (button.isHovered() && button.onClickFunction !== null) {
         button.onClickFunction();
       }
@@ -164,18 +162,19 @@ function draw() {
   }
   ctx.beginPath();
   ctx.strokeStyle = colors.gameBorder;
-  ctx.lineWidth = 3 * scale;
+  ctx.lineWidth = 3 * gameVars.scale;
   ctx.rect(topLeft[0], topLeft[1], convertDimToCanvas(1000), convertDimToCanvas(1000));
   ctx.stroke();
 }
 
-let enemyTime = 3;
-
 function gameLoop(timestamp) {
   if (gameVars.gameState == 'game') {
     const deltaTime = (timestamp - lastUpdate) / 1000;
-    if (transferDelay > 0) {
-      transferDelay -= deltaTime;
+    if (gameVars.transferDelay > 0) {
+      lastUpdate = timestamp;
+      gameVars.transferDelay -= deltaTime*1000;
+      draw();
+      drawUI(ctx);
     }
     else {
       lastUpdate = timestamp;
@@ -184,13 +183,13 @@ function gameLoop(timestamp) {
       
       draw();
     
-      enemyTime -= deltaTime;
-      if (enemyTime < 0) {
+      gameVars.enemyTime -= deltaTime;
+      if (gameVars.enemyTime < 0) {
         gameVars.wave += 1;
         const enemiesCount = gameVars.wave;
         for (let i = 0; i < enemiesCount; i++){
           generateWave(gameVars.wave);
-          enemyTime = getNextWaveTime(gameVars.wave);
+          gameVars.enemyTime = getNextWaveTime(gameVars.wave);
         }
       }
       drawUI(ctx);
@@ -201,8 +200,10 @@ function gameLoop(timestamp) {
   }
   else if (gameVars.gameState == 'menu') {
     const deltaTime = (timestamp - lastUpdate) / 1000;
-    if (transferDelay > 0) {
-      transferDelay -= deltaTime;
+    if (gameVars.transferDelay > 0) {
+      gameVars.transferDelay -= deltaTime * 1000;
+      lastUpdate = timestamp;
+      drawMenu(ctx, deltaTime);
     }
     else {
       lastUpdate = timestamp;
@@ -211,8 +212,8 @@ function gameLoop(timestamp) {
   }
   else if (gameVars.gameState == 'death') {
     const deltaTime = (timestamp - lastUpdate) / 1000;
-    if (transferDelay > 0) {
-      transferDelay -= deltaTime;
+    if (gameVars.transferDelay > 0) {
+      gameVars.transferDelay -= deltaTime;
     }
     else {
       lastUpdate = timestamp;
