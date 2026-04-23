@@ -8,7 +8,7 @@ function drawUI(ctx) {
   );
   
   ctx.fillStyle = colors.uiHp;
-  for (let i = 0; i < player.hp; i++){
+  for (let i = 0; i < gameVars.player.hp; i++){
     ctx.beginPath();
     ctx.arc(
       gameVars.uiOffsetX + 10*gameVars.scale + (i*50*gameVars.scale),

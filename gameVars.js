@@ -1,6 +1,17 @@
 let gameVars = {
   wave: 0,
   enemyTime: 3,
+  player: new Player(
+    500,  // x
+    500,  // y
+    3,  // hp
+    80, // size
+    200,  // speed
+    [  // guns
+      new BasicPistol(null),
+      new ShotGun(5)
+    ]
+  ),
   
   // menu, game, death
   gameState: 'menu',

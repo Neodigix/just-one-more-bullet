@@ -8,8 +8,8 @@ class Enemy {
   }
   updatePosition(deltaTime) {
     const direction = [
-      player.x-this.x,
-      player.y-this.y,
+      gameVars.player.x-this.x,
+      gameVars.player.y-this.y,
     ];
     const speedVector = normalizeVector(direction);
     this.x += speedVector[0] * this.speed * deltaTime;
@@ -33,18 +33,18 @@ class Enemy {
     return !this.isAlive;
   }
   getPlayerDistance() {
-    const xDistance2 = (this.x-player.x)*(this.x-player.x)
-    const yDistance2 = (this.y-player.y)*(this.y-player.y)
+    const xDistance2 = (this.x-gameVars.player.x)*(this.x-gameVars.player.x)
+    const yDistance2 = (this.y-gameVars.player.y)*(this.y-gameVars.player.y)
     return Math.sqrt(xDistance2 + yDistance2);
   }
   checkCollision() {
     if (this.getPlayerDistance() <= 48) {
-      if(player.immortalityTime <= 0){
+      if(gameVars.player.immortalityTime <= 0){
         clickSound.currentTime = 0;
         clickSound.play();
-        player.hp -= 1;
+        gameVars.player.hp -= 1;
         this.isAlive = false;
-        player.immortalityTime = 1000;
+        gameVars.player.immortalityTime = 1000;
       }
     }
   }

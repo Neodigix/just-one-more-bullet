@@ -3,7 +3,7 @@ class BasicPistol {
     this.ammo = null;
   }
   draw(ctx) {
-    const playerPos = convertPosToCanvas(player.x, player.y);
+    const playerPos = convertPosToCanvas(gameVars.player.x, gameVars.player.y);
     ctx.beginPath();
     const lookingVect = getLookingDirection();
     const angle = Math.atan2(lookingVect[0], lookingVect[1]);
@@ -16,8 +16,8 @@ class BasicPistol {
   shoot(dirVector){
     // TODO safe add
     const newBullet = new Bullet([
-      player.x + dirVector[0]*30,
-      player.y + dirVector[1]*30
+      gameVars.player.x + dirVector[0]*30,
+      gameVars.player.y + dirVector[1]*30
     ], dirVector, 400)
     bullets.push(newBullet);
   }
@@ -25,10 +25,11 @@ class BasicPistol {
 
 class ShotGun extends BasicPistol{
   constructor(ammo) {
+    super(ammo);
     this.ammo = ammo;
   }
   draw(ctx) {
-    const playerPos = convertPosToCanvas(player.x, player.y);
+    const playerPos = convertPosToCanvas(gameVars.player.x, gameVars.player.y);
     ctx.beginPath();
     const lookingVect = getLookingDirection();
     const angle = Math.atan2(lookingVect[0], lookingVect[1]);
@@ -42,8 +43,8 @@ class ShotGun extends BasicPistol{
     if(this.ammo > 0){
       ammo -= 1;
       const newBullet = new Bullet([
-        player.x + dirVector[0]*30,
-        player.y + dirVector[1]*30
+        gameVars.player.x + dirVector[0]*30,
+        gameVars.player.y + dirVector[1]*30
       ], dirVector, 400)
       bullets.push(newBullet);
     }

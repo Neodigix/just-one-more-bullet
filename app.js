@@ -32,10 +32,10 @@ gameCanvas.addEventListener('click', function(event) {
   const y = event.clientY - rect.top;
   const pos = convertPosFromCanvas(x, y);
   if (gameVars.gameState == 'game') {
-    let dirVector = [pos[0]-player.x, pos[1]-player.y];
+    let dirVector = [pos[0]-gameVars.player.x, pos[1]-gameVars.player.y];
     dirVector = normalizeVector(dirVector);
     // TODO safe add
-    player.gun.shoot(dirVector);
+    gameVars.player.guns[gameVars.player.currentGun].shoot(dirVector);
   }
   else if (gameVars.gameState == 'menu') {
     for (let i = 0; i < menuButtons.length; i++){
@@ -67,16 +67,6 @@ gameCanvas.addEventListener("mousemove", (e) => {
 
 let lastUpdate = 0;
 
-const player = {
-  x: 500,
-  y: 500,
-  hp: 3,
-  size: 80,
-  speed: 200,
-  immortalityTime: 0, // In ms
-  gun: new BasicPistol()
-};
-
 let bullets = [];
 let enemies = [];
 let enemiesToAdd = [];
@@ -100,19 +90,19 @@ function update(deltaTime) {
   
   if (speedVector[0] != 0 || speedVector[1] != 0) {
     speedVector = normalizeVector(speedVector);
-    player.x += speedVector[0] * player.speed * deltaTime;
-    player.y += speedVector[1] * player.speed * deltaTime;
-    if (player.x < player.size / 2) {
-      player.x = player.size / 2;
+    gameVars.player.x += speedVector[0] * gameVars.player.speed * deltaTime;
+    gameVars.player.y += speedVector[1] * gameVars.player.speed * deltaTime;
+    if (gameVars.player.x < gameVars.player.size / 2) {
+      gameVars.player.x = gameVars.player.size / 2;
     }
-    else if (player.x > 1000 - (player.size / 2)) {
-      player.x = 1000 - (player.size / 2);
+    else if (gameVars.player.x > 1000 - (gameVars.player.size / 2)) {
+      gameVars.player.x = 1000 - (gameVars.player.size / 2);
     }
-    if (player.y < player.size / 2) {
-      player.y = player.size / 2;
+    if (gameVars.player.y < gameVars.player.size / 2) {
+      gameVars.player.y = gameVars.player.size / 2;
     }
-    else if (player.y > 1000 - (player.size / 2)) {
-      player.y = 1000 - (player.size / 2);
+    else if (gameVars.player.y > 1000 - (gameVars.player.size / 2)) {
+      gameVars.player.y = 1000 - (gameVars.player.size / 2);
     }
   }
   
@@ -149,7 +139,7 @@ function draw() {
   const topLeft = convertPosToCanvas(0, 0);
   ctx.fillRect(topLeft[0], topLeft[1], convertDimToCanvas(1000), convertDimToCanvas(1000));
   
-  drawPlayer(ctx);
+  gameVars.player.draw(ctx);
 
   for (let i = 0; i < bullets.length; i++){
     bullets[i].draw(ctx);
@@ -190,8 +180,8 @@ function gameLoop(timestamp) {
         }
       }
       drawUI(ctx);
-      if(player.immortalityTime > 0){
-        player.immortalityTime -= deltaTime * 1000;
+      if(gameVars.player.immortalityTime > 0){
+        gameVars.player.immortalityTime -= deltaTime * 1000;
       }
     }
   }
@@ -217,16 +207,16 @@ function gameLoop(timestamp) {
       drawDeath(ctx);
     }
   }
-  if (gameVars.gameState == 'game' && player.hp <= 0) {
+  if (gameVars.gameState == 'game' && gameVars.player.hp <= 0) {
     gameVars.gameState = 'death';
   }
   requestAnimationFrame(gameLoop);
 }
 
 function resetGame() {
-  player.x = 500;
-  player.y = 500;
-  player.hp = 3;
+  gameVars.player.x = 500;
+  gameVars.player.y = 500;
+  gameVars.player.hp = 3;
   bullets = [];
   enemies = [];
   gameVars.wave = 0;

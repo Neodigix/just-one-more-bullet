@@ -26,3 +26,8 @@ function getDistance(x1, y1, x2, y2) {
 function getRandomElementFromArray(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
+
+function getLookingDirection() {
+  let dirVector = [mouseX-gameVars.player.x, mouseY-gameVars.player.y];
+  return normalizeVector(dirVector);
+}

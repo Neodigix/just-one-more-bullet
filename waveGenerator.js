@@ -9,7 +9,7 @@ function generateWave(waveNum) {
   while (currentDangerLvl < dangerLvl) {
     let enemyX = Math.random() * 1000;
     let enemyY = Math.random() * 1000;
-    while (getDistance(enemyX, enemyY, player.x, player.y) < 150) {
+    while (getDistance(enemyX, enemyY, gameVars.player.x, gameVars.player.y) < 150) {
       enemyX = Math.random() * 1000;
       enemyY = Math.random() * 1000;
     }
