@@ -40,8 +40,7 @@ class Enemy {
   checkCollision() {
     if (this.getPlayerDistance() <= 48) {
       if(gameVars.player.immortalityTime <= 0){
-        clickSound.currentTime = 0;
-        clickSound.play();
+        gameVars.soundPlayer.playClick();
         gameVars.player.hp -= 1;
         this.isAlive = false;
         gameVars.player.immortalityTime = 1000;

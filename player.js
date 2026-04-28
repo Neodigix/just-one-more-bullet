@@ -4,7 +4,7 @@ class Player{
     this.y = y;
     this.hp = hp;
     this.size = size;
-    this.spped = speed;
+    this.speed = speed;
     this.guns = guns;
     this.immortalityTime = 0;
     this.currentGun = 0;

@@ -2,8 +2,6 @@ const version = '0.0.3'
 const gameCanvas = document.getElementById('gameCanvas');
 const ctx = gameCanvas.getContext('2d');
 
-const clickSound = new Audio('click.wav');
-
 // ResizegameCanvas to fill screen
 function resizeCanvas() {
    gameCanvas.width = window.innerWidth;
@@ -40,8 +38,7 @@ gameCanvas.addEventListener('click', function(event) {
   else if (gameVars.gameState == 'menu') {
     for (let i = 0; i < menuButtons.length; i++){
       const button = menuButtons[i];
-      clickSound.currentTime = 0;
-      clickSound.play();
+      gameVars.soundPlayer.playClick();
       if (button.isHovered() && button.onClickFunction !== null) {
         button.onClickFunction();
       }

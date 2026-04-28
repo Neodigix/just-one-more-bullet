@@ -22,5 +22,7 @@ let gameVars = {
   offsetX: 0,
   offsetY: 0,
   uiOffsetX: 0,
-  scale: 1
+  scale: 1,
+  
+  soundPlayer: new SoundPlayer()
 };
