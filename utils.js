@@ -27,6 +27,10 @@ function getRandomElementFromArray(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
+function getRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min)) + min;
+}
+
 function getLookingDirection() {
   let dirVector = [mouseX-gameVars.player.x, mouseY-gameVars.player.y];
   return normalizeVector(dirVector);

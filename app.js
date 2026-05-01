@@ -44,6 +44,15 @@ gameCanvas.addEventListener('click', function(event) {
       }
     }
   }
+  else if (gameVars.gameState == 'upgrade') {
+    for (let i = 0; i < gameVars.view.buttons.length; i++){
+      const button = gameVars.view.buttons[i];
+      gameVars.soundPlayer.playClick();
+      if (button.isHovered() && button.onClickFunction !== null) {
+        button.onClickFunction();
+      }
+    }
+  }
   else if (gameVars.gameState == 'death') {
     if (deathButton.isHovered()) {
       deathButton.onClickFunction();
@@ -128,6 +137,24 @@ function update(deltaTime) {
   }
   enemiesToAdd = [];
   enemies = newEnemies;
+  
+  
+  for (let i = 0; i < gameVars.items.length; i++) {
+    if (gameVars.items[i].checkPickup()) {
+      gameVars.items[i].pickUp();
+    }
+  }
+  let items = [];
+  for (let i = 0; i < gameVars.items.length; i++) {
+    if (!(gameVars.items[i].picked)) {
+      items.push(gameVars.items[i]);
+    }
+  }
+  for (let i = 0; i < gameVars.newItems.length; i++) {
+    items.push(gameVars.newItems[i]);
+  }
+  gameVars.items = items;
+  gameVars.newItems = [];
 }
 
 function draw() {
@@ -138,6 +165,9 @@ function draw() {
   
   gameVars.player.draw(ctx);
 
+  for (let i = 0; i < gameVars.items.length; i++){
+    gameVars.items[i].draw(ctx);
+  }
   for (let i = 0; i < bullets.length; i++){
     bullets[i].draw(ctx);
   }
@@ -204,6 +234,17 @@ function gameLoop(timestamp) {
       drawDeath(ctx);
     }
   }
+  else if (gameVars.gameState == 'upgrade') {
+    const deltaTime = (timestamp - lastUpdate) / 1000;
+    if (gameVars.transferDelay > 0) {
+      gameVars.transferDelay -= deltaTime;
+    }
+    else {
+      lastUpdate = timestamp;
+      gameVars.view.drawView(ctx);
+    }
+  }
+  
   if (gameVars.gameState == 'game' && gameVars.player.hp <= 0) {
     gameVars.gameState = 'death';
   }

@@ -44,5 +44,6 @@ function drawUI(ctx) {
   
   ctx.font = (40*gameVars.scale)+ 'px Arial';
   ctx.fillStyle = colors.uiWaveText;
+  ctx.textAlign = 'left';
   ctx.fillText('Wave: '+gameVars.wave, gameVars.uiOffsetX+(5*gameVars.scale), gameVars.offsetY + (150 * gameVars.scale));
 }

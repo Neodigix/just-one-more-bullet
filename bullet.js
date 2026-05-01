@@ -1,11 +1,11 @@
 class Bullet {
-  constructor(startPos, initDirection, speed, travelDistance=3000) {
+  constructor(startPos, initDirection, speed, bounces=4) {
     this.x = startPos[0];
     this.y = startPos[1];
     this.direction = initDirection;
     this.speed = speed;
-    this.distanceLeft = travelDistance;
     this.isAlive = true;
+    this.bounces = bounces;
     this.sleepIterations = 0;
   }
   updatePosition(deltaTime) {
@@ -14,18 +14,21 @@ class Bullet {
     this.y += speedVector[1] * this.speed * deltaTime;
     if (this.x < 0) {
       this.direction[0] = Math.abs(this.direction[0]);
+      this.bounces -= 1;
     }
     else if (this.x > 1000) {
       this.direction[0] = -Math.abs(this.direction[0]);
+      this.bounces -= 1;
     }
     if (this.y < 0) {
       this.direction[1] = Math.abs(this.direction[1]);
+      this.bounces -= 1;
     }
     else if (this.y > 1000) {
       this.direction[1] = -Math.abs(this.direction[1]);
+      this.bounces -= 1;
     }
-    this.distanceLeft -= this.speed * deltaTime;
-    if (this.distanceLeft <= 0) {
+    if (this.bounces <= 0) {
       this.isAlive = false;
     }
     if (this.sleepIterations > 0) {
@@ -59,8 +62,7 @@ class Bullet {
   checkCollision() {
     if (this.getPlayerDistance() <= 28) {
       if(gameVars.player.immortalityTime <= 0){
-        clickSound.currentTime = 0;
-        clickSound.play();
+        gameVars.soundPlayer.playClick();
         gameVars.player.hp -= 1;
         this.isAlive = false;
         gameVars.player.immortalityTime = 1000;

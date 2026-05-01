@@ -47,9 +47,16 @@ class Enemy {
       }
     }
   }
+  dropItem() {
+    if (getRandomInt(0, 10) == 0) {
+      const newItem = new Item([this.x, this.y]);
+      gameVars.newItems.push(newItem);
+    }
+  }
   hitByBullet(bullet) {
     this.isAlive = false;
     bullet.isAlive = false;
+    this.dropItem()
   }
 }
 
@@ -84,5 +91,6 @@ class SolidEnemy extends Enemy{
     bullet.direction[1] = bullet.direction[1] - 2 * dot * n[1];
     bullet.direction = normalizeVector(bullet.direction);
     bullet.sleepIterations = 1;
+    bullet.bounces -= 1;
   }
 }

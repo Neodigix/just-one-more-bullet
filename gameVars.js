@@ -12,9 +12,12 @@ let gameVars = {
       new ShotGun(5)
     ]
   ),
+  items: [],
+  newItems: [],
   
-  // menu, game, death
+  // menu, game, death, upgrade
   gameState: 'menu',
+  view: null,
   
   transferDelay: 20,
   
