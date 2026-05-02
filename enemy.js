@@ -8,8 +8,8 @@ class Enemy {
   }
   updatePosition(deltaTime) {
     const direction = [
-      player.x-this.x,
-      player.y-this.y,
+      gameVars.player.x-this.x,
+      gameVars.player.y-this.y,
     ];
     const speedVector = normalizeVector(direction);
     this.x += speedVector[0] * this.speed * deltaTime;
@@ -23,7 +23,7 @@ class Enemy {
     ctx.arc(
       pos[0],  // x
       pos[1],  // y
-      25*scale,  // radius
+      25*gameVars.scale,  // radius
       0,  // starting angle
       2 * Math.PI  // ending angle
     )
@@ -33,22 +33,30 @@ class Enemy {
     return !this.isAlive;
   }
   getPlayerDistance() {
-    const xDistance2 = (this.x-player.x)*(this.x-player.x)
-    const yDistance2 = (this.y-player.y)*(this.y-player.y)
+    const xDistance2 = (this.x-gameVars.player.x)*(this.x-gameVars.player.x)
+    const yDistance2 = (this.y-gameVars.player.y)*(this.y-gameVars.player.y)
     return Math.sqrt(xDistance2 + yDistance2);
   }
   checkCollision() {
     if (this.getPlayerDistance() <= 48) {
-      if(player.immortalityTime <= 0){
-        player.hp -= 1;
+      if(gameVars.player.immortalityTime <= 0){
+        gameVars.soundPlayer.playClick();
+        gameVars.player.hp -= 1;
         this.isAlive = false;
-        player.immortalityTime = 1000;
+        gameVars.player.immortalityTime = 1000;
       }
+    }
+  }
+  dropItem() {
+    if (getRandomInt(0, 20) == 0) {
+      const newItem = new Item([this.x, this.y]);
+      gameVars.newItems.push(newItem);
     }
   }
   hitByBullet(bullet) {
     this.isAlive = false;
     bullet.isAlive = false;
+    this.dropItem()
   }
 }
 
@@ -64,7 +72,7 @@ class SolidEnemy extends Enemy{
     ctx.arc(
       pos[0],  // x
       pos[1],  // y
-      25*scale,  // radius
+      25*gameVars.scale,  // radius
       0,  // starting angle
       2 * Math.PI  // ending angle
     )
@@ -83,5 +91,6 @@ class SolidEnemy extends Enemy{
     bullet.direction[1] = bullet.direction[1] - 2 * dot * n[1];
     bullet.direction = normalizeVector(bullet.direction);
     bullet.sleepIterations = 1;
+    bullet.bounces -= 1;
   }
 }

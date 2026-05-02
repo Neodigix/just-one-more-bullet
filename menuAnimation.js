@@ -49,7 +49,7 @@ function updateAndDrawMenuAnimation(ctx, deltaTime) {
     ctx.arc(
       pos[0],  // x
       pos[1],  // y
-      5*scale,  // radius
+      5*gameVars.scale,  // radius
       0,  // starting angle
       2 * Math.PI  // ending angle
     )

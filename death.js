@@ -2,7 +2,7 @@ const deathButton = new MenuButton(
   600-250, 500, 500, 100,
   'Menu',
   function () {
-    transferDelay = 20;
+    gameVars.transferDelay = 20;
     gameVars.gameState = 'menu';
   }
 );
@@ -14,17 +14,17 @@ function drawDeath(ctx) {
   ctx.fillRect(topLeft[0], topLeft[1], convertDimToCanvas(1200), convertDimToCanvas(1000));
   
   ctx.textAlign = 'center';
-  ctx.font = (40*scale)+ 'px Arial';
+  ctx.font = (40*gameVars.scale)+ 'px Arial';
   ctx.fillStyle = colors.deathText;
   ctx.fillText(
     'You are dead!',
-    uiOffsetX + (600*scale),
-    offsetY + (200*scale)
+    gameVars.uiOffsetX + (600*gameVars.scale),
+    gameVars.offsetY + (200*gameVars.scale)
   );
   ctx.fillText(
     'Waves survived: ' + (gameVars.wave-1),
-    uiOffsetX + (600*scale),
-    offsetY + (200*scale) + (40*scale)
+    gameVars.uiOffsetX + (600*gameVars.scale),
+    gameVars.offsetY + (200*gameVars.scale) + (40*gameVars.scale)
   );
   
   deathButton.draw(ctx);

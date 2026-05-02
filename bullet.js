@@ -1,11 +1,11 @@
 class Bullet {
-  constructor(startPos, initDirection, speed, travelDistance=3000) {
+  constructor(startPos, initDirection, speed, bounces=4) {
     this.x = startPos[0];
     this.y = startPos[1];
     this.direction = initDirection;
     this.speed = speed;
-    this.distanceLeft = travelDistance;
     this.isAlive = true;
+    this.bounces = bounces;
     this.sleepIterations = 0;
   }
   updatePosition(deltaTime) {
@@ -14,18 +14,21 @@ class Bullet {
     this.y += speedVector[1] * this.speed * deltaTime;
     if (this.x < 0) {
       this.direction[0] = Math.abs(this.direction[0]);
+      this.bounces -= 1;
     }
     else if (this.x > 1000) {
       this.direction[0] = -Math.abs(this.direction[0]);
+      this.bounces -= 1;
     }
     if (this.y < 0) {
       this.direction[1] = Math.abs(this.direction[1]);
+      this.bounces -= 1;
     }
     else if (this.y > 1000) {
       this.direction[1] = -Math.abs(this.direction[1]);
+      this.bounces -= 1;
     }
-    this.distanceLeft -= this.speed * deltaTime;
-    if (this.distanceLeft <= 0) {
+    if (this.bounces <= 0) {
       this.isAlive = false;
     }
     if (this.sleepIterations > 0) {
@@ -42,7 +45,7 @@ class Bullet {
     ctx.arc(
       pos[0],  // x
       pos[1],  // y
-      5*scale,  // radius
+      5*gameVars.scale,  // radius
       0,  // starting angle
       2 * Math.PI  // ending angle
     )
@@ -52,16 +55,17 @@ class Bullet {
     return !this.isAlive;
   }
   getPlayerDistance() {
-    const xDistance2 = (this.x-player.x)*(this.x-player.x)
-    const yDistance2 = (this.y-player.y)*(this.y-player.y)
+    const xDistance2 = (this.x-gameVars.player.x)*(this.x-gameVars.player.x)
+    const yDistance2 = (this.y-gameVars.player.y)*(this.y-gameVars.player.y)
     return Math.sqrt(xDistance2 + yDistance2);
   }
   checkCollision() {
     if (this.getPlayerDistance() <= 28) {
-      if(player.immortalityTime <= 0){
-        player.hp -= 1;
+      if(gameVars.player.immortalityTime <= 0){
+        gameVars.soundPlayer.playClick();
+        gameVars.player.hp -= 1;
         this.isAlive = false;
-        player.immortalityTime = 1000;
+        gameVars.player.immortalityTime = 1000;
       }
     }
     for (let i = 0; i < enemies.length; i++) {

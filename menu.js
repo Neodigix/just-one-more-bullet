@@ -13,18 +13,18 @@ class MenuButton{
       ctx.fillStyle = colors.menuButtonBackgroundHover;
     }
     ctx.fillRect(
-      uiOffsetX+(this.x*scale),
-      offsetY+(this.y*scale),
-      this.width*scale,
-      this.height*scale,
+      gameVars.uiOffsetX+(this.x*gameVars.scale),
+      gameVars.offsetY+(this.y*gameVars.scale),
+      this.width*gameVars.scale,
+      this.height*gameVars.scale,
     );
-    ctx.font = (40*scale)+ 'px Arial';
+    ctx.font = (40*gameVars.scale)+ 'px Arial';
     ctx.fillStyle = colors.menuButtonText;
     ctx.textAlign = 'center';
     ctx.fillText(
       this.text,
-      uiOffsetX + (this.x*scale) + ((this.width/2)*scale),
-      offsetY + (this.y*scale) + ((this.height/2)*scale) + (20*scale)
+      gameVars.uiOffsetX + (this.x*gameVars.scale) + ((this.width/2)*gameVars.scale),
+      gameVars.offsetY + (this.y*gameVars.scale) + ((this.height/2)*gameVars.scale) + (20*gameVars.scale)
     );
   }
   isHovered() {
@@ -47,7 +47,7 @@ const menuButtons = [
     'START GAME',
     function () {
       resetGame();
-      transferDelay = 20;
+      gameVars.transferDelay = 20;
       gameVars.gameState = 'game';
     }
   ),
@@ -68,12 +68,12 @@ function drawMenu(ctx, deltaTime) {
   
   // Game title
   ctx.textAlign = 'center';
-  ctx.font = (40*scale)+ 'px Arial';
+  ctx.font = (40*gameVars.scale)+ 'px Arial';
   ctx.fillStyle = colors.menuGameTitle;
   ctx.fillText(
     'Just One More Bullet',
-    uiOffsetX + (600*scale),
-    offsetY + (60*scale)
+    gameVars.uiOffsetX + (600*gameVars.scale),
+    gameVars.offsetY + (60*gameVars.scale)
   );
   
   // Buttons
@@ -84,11 +84,11 @@ function drawMenu(ctx, deltaTime) {
   
   // Game version
   ctx.textAlign = 'left';
-  ctx.font = (40*scale)+ 'px Arial';
+  ctx.font = (40*gameVars.scale)+ 'px Arial';
   ctx.fillStyle = colors.menuGameVersion;
   ctx.fillText(
     'Game version: ' + version,
-    uiOffsetX + (10*scale),
-    offsetY + (960*scale)
+    gameVars.uiOffsetX + (10*gameVars.scale),
+    gameVars.offsetY + (960*gameVars.scale)
   );
 }

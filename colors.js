@@ -3,7 +3,8 @@ colorsPalete = {
   white2: '#aaaaaa',
   red: '#ff0000',
   red2: '#990000',
-  black: 'black'
+  black: 'black',
+  yellow: '#e5d600'
 };
 
 colors = {
@@ -16,6 +17,7 @@ colors = {
   gun: colorsPalete.white,
   enemy: colorsPalete.red2,
   solidEnemy: colorsPalete.red,
+  item: colorsPalete.yellow,
   
   // Menu
   menuBackground: colorsPalete.black,
@@ -33,4 +35,4 @@ colors = {
   uiBackground: colorsPalete.black,
   uiWaveText: colorsPalete.white,
   uiHp: colorsPalete.red
-}
+};

@@ -1,30 +1,24 @@
-const version = '0.0.3'
+const version = '0.0.4'
 const gameCanvas = document.getElementById('gameCanvas');
 const ctx = gameCanvas.getContext('2d');
 
-let transferDelay = 20;
-
 // ResizegameCanvas to fill screen
-let offsetX = 0;
-let uiOffsetX;
-let offsetY = 0;
-let scale = 1;
 function resizeCanvas() {
    gameCanvas.width = window.innerWidth;
    gameCanvas.height = window.innerHeight;
    if (gameCanvas.width > (gameCanvas.height*(1200/1000))) {
-     scale = gameCanvas.height / 1000;
-     const menuSize = 200 * scale;
-     offsetY = 0;
-     offsetX = ((gameCanvas.width - (1200 * scale))/2)+menuSize;
-     uiOffsetX = offsetX-menuSize;
+     gameVars.scale = gameCanvas.height / 1000;
+     const menuSize = 200 * gameVars.scale;
+     gameVars.offsetY = 0;
+     gameVars.offsetX = ((gameCanvas.width - (1200 * gameVars.scale))/2)+menuSize;
+     gameVars.uiOffsetX = gameVars.offsetX-menuSize;
    }
    else {
-     scale = gameCanvas.width / 1200;
-     const menuSize = 200 * scale;
-     offsetX = menuSize;
-     offsetY = (gameCanvas.height - (1000 * scale))/2;
-     uiOffsetX = offsetX-menuSize;
+     gameVars.scale = gameCanvas.width / 1200;
+     const menuSize = 200 * gameVars.scale;
+     gameVars.offsetX = menuSize;
+     gameVars.offsetY = (gameCanvas.height - (1000 * gameVars.scale))/2;
+     gameVars.uiOffsetX = gameVars.offsetX-menuSize;
    }
 }
 window.addEventListener('resize', resizeCanvas);
@@ -36,18 +30,24 @@ gameCanvas.addEventListener('click', function(event) {
   const y = event.clientY - rect.top;
   const pos = convertPosFromCanvas(x, y);
   if (gameVars.gameState == 'game') {
-    let dirVector = [pos[0]-player.x, pos[1]-player.y];
+    let dirVector = [pos[0]-gameVars.player.x, pos[1]-gameVars.player.y];
     dirVector = normalizeVector(dirVector);
     // TODO safe add
-    const newBullet = new Bullet([
-      player.x + dirVector[0]*30,
-      player.y + dirVector[1]*30
-    ], dirVector, 400)
-     bullets.push(newBullet);
+    gameVars.player.guns[gameVars.player.currentGun].shoot(dirVector);
   }
   else if (gameVars.gameState == 'menu') {
     for (let i = 0; i < menuButtons.length; i++){
       const button = menuButtons[i];
+      gameVars.soundPlayer.playClick();
+      if (button.isHovered() && button.onClickFunction !== null) {
+        button.onClickFunction();
+      }
+    }
+  }
+  else if (gameVars.gameState == 'upgrade') {
+    for (let i = 0; i < gameVars.view.buttons.length; i++){
+      const button = gameVars.view.buttons[i];
+      gameVars.soundPlayer.playClick();
       if (button.isHovered() && button.onClickFunction !== null) {
         button.onClickFunction();
       }
@@ -73,15 +73,6 @@ gameCanvas.addEventListener("mousemove", (e) => {
 
 let lastUpdate = 0;
 
-const player = {
-  x: 500,
-  y: 500,
-  hp: 3,
-  size: 80,
-  speed: 200,
-  immortalityTime: 0 // In ms
-};
-
 let bullets = [];
 let enemies = [];
 let enemiesToAdd = [];
@@ -105,19 +96,19 @@ function update(deltaTime) {
   
   if (speedVector[0] != 0 || speedVector[1] != 0) {
     speedVector = normalizeVector(speedVector);
-    player.x += speedVector[0] * player.speed * deltaTime;
-    player.y += speedVector[1] * player.speed * deltaTime;
-    if (player.x < player.size / 2) {
-      player.x = player.size / 2;
+    gameVars.player.x += speedVector[0] * gameVars.player.speed * deltaTime;
+    gameVars.player.y += speedVector[1] * gameVars.player.speed * deltaTime;
+    if (gameVars.player.x < gameVars.player.size / 2) {
+      gameVars.player.x = gameVars.player.size / 2;
     }
-    else if (player.x > 1000 - (player.size / 2)) {
-      player.x = 1000 - (player.size / 2);
+    else if (gameVars.player.x > 1000 - (gameVars.player.size / 2)) {
+      gameVars.player.x = 1000 - (gameVars.player.size / 2);
     }
-    if (player.y < player.size / 2) {
-      player.y = player.size / 2;
+    if (gameVars.player.y < gameVars.player.size / 2) {
+      gameVars.player.y = gameVars.player.size / 2;
     }
-    else if (player.y > 1000 - (player.size / 2)) {
-      player.y = 1000 - (player.size / 2);
+    else if (gameVars.player.y > 1000 - (gameVars.player.size / 2)) {
+      gameVars.player.y = 1000 - (gameVars.player.size / 2);
     }
   }
   
@@ -146,6 +137,24 @@ function update(deltaTime) {
   }
   enemiesToAdd = [];
   enemies = newEnemies;
+  
+  
+  for (let i = 0; i < gameVars.items.length; i++) {
+    if (gameVars.items[i].checkPickup()) {
+      gameVars.items[i].pickUp();
+    }
+  }
+  let items = [];
+  for (let i = 0; i < gameVars.items.length; i++) {
+    if (!(gameVars.items[i].picked)) {
+      items.push(gameVars.items[i]);
+    }
+  }
+  for (let i = 0; i < gameVars.newItems.length; i++) {
+    items.push(gameVars.newItems[i]);
+  }
+  gameVars.items = items;
+  gameVars.newItems = [];
 }
 
 function draw() {
@@ -154,8 +163,11 @@ function draw() {
   const topLeft = convertPosToCanvas(0, 0);
   ctx.fillRect(topLeft[0], topLeft[1], convertDimToCanvas(1000), convertDimToCanvas(1000));
   
-  drawPlayer(ctx);
+  gameVars.player.draw(ctx);
 
+  for (let i = 0; i < gameVars.items.length; i++){
+    gameVars.items[i].draw(ctx);
+  }
   for (let i = 0; i < bullets.length; i++){
     bullets[i].draw(ctx);
   }
@@ -163,19 +175,27 @@ function draw() {
     enemies[i].draw(ctx);
   }
   ctx.beginPath();
+  ctx.lineWidth = 3 * gameVars.scale;
   ctx.strokeStyle = colors.gameBorder;
-  ctx.lineWidth = 3 * scale;
-  ctx.rect(topLeft[0], topLeft[1], convertDimToCanvas(1000), convertDimToCanvas(1000));
+  
+  ctx.moveTo(topLeft[0], topLeft[1]);
+  
+  ctx.lineTo(topLeft[0]+convertDimToCanvas(1000), topLeft[1]);
+  ctx.lineTo(topLeft[0]+convertDimToCanvas(1000), topLeft[1]+convertDimToCanvas(1000));
+  ctx.lineTo(topLeft[0], topLeft[1]+convertDimToCanvas(1000));
+  ctx.lineTo(topLeft[0], topLeft[1]);
+  
   ctx.stroke();
 }
-
-let enemyTime = 3;
 
 function gameLoop(timestamp) {
   if (gameVars.gameState == 'game') {
     const deltaTime = (timestamp - lastUpdate) / 1000;
-    if (transferDelay > 0) {
-      transferDelay -= deltaTime;
+    if (gameVars.transferDelay > 0) {
+      lastUpdate = timestamp;
+      gameVars.transferDelay -= deltaTime*1000;
+      draw();
+      drawUI(ctx);
     }
     else {
       lastUpdate = timestamp;
@@ -184,25 +204,27 @@ function gameLoop(timestamp) {
       
       draw();
     
-      enemyTime -= deltaTime;
-      if (enemyTime < 0) {
+      gameVars.enemyTime -= deltaTime;
+      if (gameVars.enemyTime < 0) {
         gameVars.wave += 1;
         const enemiesCount = gameVars.wave;
         for (let i = 0; i < enemiesCount; i++){
           generateWave(gameVars.wave);
-          enemyTime = getNextWaveTime(gameVars.wave);
+          gameVars.enemyTime = getNextWaveTime(gameVars.wave);
         }
       }
       drawUI(ctx);
-      if(player.immortalityTime > 0){
-        player.immortalityTime -= deltaTime * 1000;
+      if(gameVars.player.immortalityTime > 0){
+        gameVars.player.immortalityTime -= deltaTime * 1000;
       }
     }
   }
   else if (gameVars.gameState == 'menu') {
     const deltaTime = (timestamp - lastUpdate) / 1000;
-    if (transferDelay > 0) {
-      transferDelay -= deltaTime;
+    if (gameVars.transferDelay > 0) {
+      gameVars.transferDelay -= deltaTime * 1000;
+      lastUpdate = timestamp;
+      drawMenu(ctx, deltaTime);
     }
     else {
       lastUpdate = timestamp;
@@ -211,24 +233,35 @@ function gameLoop(timestamp) {
   }
   else if (gameVars.gameState == 'death') {
     const deltaTime = (timestamp - lastUpdate) / 1000;
-    if (transferDelay > 0) {
-      transferDelay -= deltaTime;
+    if (gameVars.transferDelay > 0) {
+      gameVars.transferDelay -= deltaTime;
     }
     else {
       lastUpdate = timestamp;
       drawDeath(ctx);
     }
   }
-  if (gameVars.gameState == 'game' && player.hp <= 0) {
+  else if (gameVars.gameState == 'upgrade') {
+    const deltaTime = (timestamp - lastUpdate) / 1000;
+    if (gameVars.transferDelay > 0) {
+      gameVars.transferDelay -= deltaTime;
+    }
+    else {
+      lastUpdate = timestamp;
+      gameVars.view.drawView(ctx);
+    }
+  }
+  
+  if (gameVars.gameState == 'game' && gameVars.player.hp <= 0) {
     gameVars.gameState = 'death';
   }
   requestAnimationFrame(gameLoop);
 }
 
 function resetGame() {
-  player.x = 500;
-  player.y = 500;
-  player.hp = 3;
+  gameVars.player.x = 500;
+  gameVars.player.y = 500;
+  gameVars.player.hp = 3;
   bullets = [];
   enemies = [];
   gameVars.wave = 0;
