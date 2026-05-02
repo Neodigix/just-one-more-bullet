@@ -175,9 +175,16 @@ function draw() {
     enemies[i].draw(ctx);
   }
   ctx.beginPath();
-  ctx.strokeStyle = colors.gameBorder;
   ctx.lineWidth = 3 * gameVars.scale;
-  ctx.rect(topLeft[0], topLeft[1], convertDimToCanvas(1000), convertDimToCanvas(1000));
+  ctx.strokeStyle = colors.gameBorder;
+  
+  ctx.moveTo(topLeft[0], topLeft[1]);
+  
+  ctx.lineTo(topLeft[0]+convertDimToCanvas(1000), topLeft[1]);
+  ctx.lineTo(topLeft[0]+convertDimToCanvas(1000), topLeft[1]+convertDimToCanvas(1000));
+  ctx.lineTo(topLeft[0], topLeft[1]+convertDimToCanvas(1000));
+  ctx.lineTo(topLeft[0], topLeft[1]);
+  
   ctx.stroke();
 }
 

@@ -48,7 +48,7 @@ class Enemy {
     }
   }
   dropItem() {
-    if (getRandomInt(0, 10) == 0) {
+    if (getRandomInt(0, 20) == 0) {
       const newItem = new Item([this.x, this.y]);
       gameVars.newItems.push(newItem);
     }
