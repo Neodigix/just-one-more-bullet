@@ -2,10 +2,11 @@ class UpgradeView{
   constructor() {
     const buttonOne = new MenuButton(
       600-250+100, 500, 500, 100,
-      'Upgrade Shotgun',
+      'Upgrade gun speed',
       function () {
+        gameVars.player.gun.setBps(gameVars.player.gun.bps + 0.05);
         gameVars.transferDelay = 20;
-        gameVars.gameState = 'menu';
+        gameVars.gameState = 'game';
       }
     );
     const buttonTwo = new MenuButton(
@@ -19,8 +20,9 @@ class UpgradeView{
     );
     const buttonThree = new MenuButton(
       600-250+100, 700, 500, 100,
-      'Skip',
+      'Green chance += 5',
       function () {
+        gameVars.player.gun.greenChance += 5;
         gameVars.transferDelay = 20;
         gameVars.gameState = 'game';
       }

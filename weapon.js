@@ -1,5 +1,13 @@
 class Pistol {
-  constructor(ammo) {
+  constructor(bps=1, greenChance=10) {
+    this.bps = bps;
+    this.shootDelta = 1000 / bps;
+    this.lastShoot = 0;
+    this.greenChance = greenChance;
+  }
+  setBps(bps) {
+    this.bps = bps;
+    this.shootDelta = 1000 / bps;
   }
   draw(ctx) {
     const playerPos = convertPosToCanvas(gameVars.player.x, gameVars.player.y);
@@ -14,10 +22,13 @@ class Pistol {
   }
   shoot(dirVector){
     // TODO safe add
-    const newBullet = new Bullet([
-      gameVars.player.x + dirVector[0] * 30,
-      gameVars.player.y + dirVector[1] * 30
-    ], dirVector, 400, 4, 10);
-    bullets.push(newBullet);
+    if (gameVars.timestamp - this.shootDelta >= this.lastShoot) {
+      this.lastShoot = gameVars.timestamp;
+      const newBullet = new Bullet([
+        gameVars.player.x + dirVector[0] * 30,
+        gameVars.player.y + dirVector[1] * 30
+      ], dirVector, 400, 4, this.greenChance);
+      bullets.push(newBullet);
+    }
   }
 }

@@ -46,4 +46,6 @@ function drawUI(ctx) {
   ctx.fillStyle = colors.uiWaveText;
   ctx.textAlign = 'left';
   ctx.fillText('Wave: '+gameVars.wave, gameVars.uiOffsetX+(5*gameVars.scale), gameVars.offsetY + (150 * gameVars.scale));
+  ctx.fillText('BPS: '+(1000/gameVars.player.gun.shootDelta), gameVars.uiOffsetX+(5*gameVars.scale), gameVars.offsetY + (200 * gameVars.scale));
+  ctx.fillText('GC: '+(gameVars.player.gun.greenChance), gameVars.uiOffsetX+(5*gameVars.scale), gameVars.offsetY + (250 * gameVars.scale));
 }

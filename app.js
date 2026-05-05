@@ -188,6 +188,7 @@ function draw() {
 }
 
 function gameLoop(timestamp) {
+  gameVars.timestamp = timestamp;
   if (gameVars.gameState == 'game') {
     const deltaTime = (timestamp - lastUpdate) / 1000;
     if (gameVars.transferDelay > 0) {
@@ -263,6 +264,7 @@ function resetGame() {
   gameVars.player.hp = 3;
   bullets = [];
   enemies = [];
+  gameVars.items = [];
   gameVars.wave = 0;
 }
 
