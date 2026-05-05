@@ -15,9 +15,9 @@ class Pistol {
   shoot(dirVector){
     // TODO safe add
     const newBullet = new Bullet([
-      gameVars.player.x + dirVector[0]*30,
-      gameVars.player.y + dirVector[1]*30
-    ], dirVector, 400)
+      gameVars.player.x + dirVector[0] * 30,
+      gameVars.player.y + dirVector[1] * 30
+    ], dirVector, 400, 4, 10);
     bullets.push(newBullet);
   }
 }

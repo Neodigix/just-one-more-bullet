@@ -11,8 +11,11 @@ class Bullet {
     this.bulletType = 'red';
   }
   bounce() {
+    this.bounces -= 1;
     if (this.bulletType == 'red') {
-      
+      if (getRandomInt(0, 100) < this.greenChance) {
+        this.bulletType = 'green';
+     }
     }
   }
   updatePosition(deltaTime) {
@@ -21,19 +24,19 @@ class Bullet {
     this.y += speedVector[1] * this.speed * deltaTime;
     if (this.x < 0) {
       this.direction[0] = Math.abs(this.direction[0]);
-      this.bounces -= 1;
+      this.bounce();
     }
     else if (this.x > 1000) {
       this.direction[0] = -Math.abs(this.direction[0]);
-      this.bounces -= 1;
+      this.bounce();
     }
     if (this.y < 0) {
       this.direction[1] = Math.abs(this.direction[1]);
-      this.bounces -= 1;
+      this.bounce();
     }
     else if (this.y > 1000) {
       this.direction[1] = -Math.abs(this.direction[1]);
-      this.bounces -= 1;
+      this.bounce();
     }
     if (this.bounces <= 0) {
       this.isAlive = false;
@@ -70,12 +73,14 @@ class Bullet {
     return Math.sqrt(xDistance2 + yDistance2);
   }
   checkCollision() {
-    if (this.getPlayerDistance() <= 28) {
-      if(gameVars.player.immortalityTime <= 0){
-        gameVars.soundPlayer.playClick();
-        gameVars.player.hp -= 1;
-        this.isAlive = false;
-        gameVars.player.immortalityTime = 1000;
+    if (this.bulletType == 'red') {
+      if (this.getPlayerDistance() <= 28) {
+        if(gameVars.player.immortalityTime <= 0){
+          gameVars.soundPlayer.playClick();
+          gameVars.player.hp -= 1;
+          this.isAlive = false;
+          gameVars.player.immortalityTime = 1000;
+        }
       }
     }
     for (let i = 0; i < enemies.length; i++) {

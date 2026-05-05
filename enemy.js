@@ -91,6 +91,6 @@ class SolidEnemy extends Enemy{
     bullet.direction[1] = bullet.direction[1] - 2 * dot * n[1];
     bullet.direction = normalizeVector(bullet.direction);
     bullet.sleepIterations = 1;
-    bullet.bounces -= 1;
+    bullet.bounce();
   }
 }
