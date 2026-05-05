@@ -32,8 +32,7 @@ gameCanvas.addEventListener('click', function(event) {
   if (gameVars.gameState == 'game') {
     let dirVector = [pos[0]-gameVars.player.x, pos[1]-gameVars.player.y];
     dirVector = normalizeVector(dirVector);
-    // TODO safe add
-    gameVars.player.guns[gameVars.player.currentGun].shoot(dirVector);
+    gameVars.player.gun.shoot(dirVector);
   }
   else if (gameVars.gameState == 'menu') {
     for (let i = 0; i < menuButtons.length; i++){

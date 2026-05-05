@@ -1,13 +1,12 @@
 class Player{
-  constructor(x, y, hp, size, speed, guns) {
+  constructor(x, y, hp, size, speed, gun) {
     this.x = x;
     this.y = y;
     this.hp = hp;
     this.size = size;
     this.speed = speed;
-    this.guns = guns;
+    this.gun = gun;
     this.immortalityTime = 0;
-    this.currentGun = 0;
   }
   draw(ctx) {
     const playerPos = convertPosToCanvas(this.x, this.y);
@@ -31,7 +30,7 @@ class Player{
     const lookingVect = getLookingDirection();
     const angle = Math.atan2(lookingVect[0], lookingVect[1]);
     
-    ctx.save()
-    this.guns[this.currentGun].draw(ctx)
+    ctx.save();
+    this.gun.draw(ctx);
   }
 }

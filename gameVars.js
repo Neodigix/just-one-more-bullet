@@ -7,10 +7,7 @@ let gameVars = {
     3,  // hp
     80, // size
     200,  // speed
-    [  // guns
-      new BasicPistol(null),
-      new ShotGun(5)
-    ]
+    new Pistol(),
   ),
   items: [],
   newItems: [],

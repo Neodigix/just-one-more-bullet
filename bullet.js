@@ -1,5 +1,5 @@
 class Bullet {
-  constructor(startPos, initDirection, speed, bounces=4) {
+  constructor(startPos, initDirection, speed, bounces=4, greenChance=0) {
     this.x = startPos[0];
     this.y = startPos[1];
     this.direction = initDirection;
@@ -7,6 +7,13 @@ class Bullet {
     this.isAlive = true;
     this.bounces = bounces;
     this.sleepIterations = 0;
+    this.greenChance = greenChance;
+    this.bulletType = 'red';
+  }
+  bounce() {
+    if (this.bulletType == 'red') {
+      
+    }
   }
   updatePosition(deltaTime) {
     const speedVector = normalizeVector(this.direction);
@@ -41,6 +48,9 @@ class Bullet {
   draw(ctx) {
     const pos = convertPosToCanvas(this.x, this.y);
     ctx.fillStyle = colors.bullet;
+    if (this.bulletType == 'green') {
+      ctx.fillStyle = colors.bulletGreen;
+    }
     ctx.beginPath();
     ctx.arc(
       pos[0],  // x

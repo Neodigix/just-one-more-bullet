@@ -3,6 +3,7 @@ colorsPalete = {
   white2: '#aaaaaa',
   red: '#ff0000',
   red2: '#990000',
+  green: '#00ff00',
   black: 'black',
   yellow: '#e5d600'
 };
@@ -12,6 +13,7 @@ colors = {
   gameBackground: colorsPalete.black,
   gameBorder: colorsPalete.white,
   bullet: colorsPalete.red,
+  bulletGreen: colorsPalete.green,
   player: colorsPalete.white,
   playerImmortal: colorsPalete.white2,
   gun: colorsPalete.white,

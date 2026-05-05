@@ -38,3 +38,7 @@ class UpgradeView{
     }
   }
 }
+
+const upgradeGreen = function () {
+  gameVars.player.gun.greenChance += 1;
+};
