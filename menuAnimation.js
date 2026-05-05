@@ -27,16 +27,16 @@ function updateAndDrawMenuAnimation(ctx, deltaTime) {
     particle.x = newX;
     particle.y = newY;
     if (particle.x < -200) {
-      particle.x += 1200;
+      particle.direction[0] = Math.abs(particle.direction[0]);
     }
     else if (particle.x > 1000) {
-      particle.x -= 1200;
+      particle.direction[0] = -Math.abs(particle.direction[0]);
     }
     if (particle.y < 0) {
-      particle.y += 1000;
+      particle.direction[1] = Math.abs(particle.direction[1]);
     }
     else if (particle.y > 1000) {
-      particle.y -= 1000;
+      particle.direction[1] =- Math.abs(particle.direction[1]);
     }
   }
   
