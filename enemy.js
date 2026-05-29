@@ -58,6 +58,14 @@ class Enemy {
     bullet.isAlive = false;
     this.dropItem()
   }
+  isInside(x, y) {
+    const xDistance2 = (x-this.x)*(x-this.x)
+    const yDistance2 = (y-this.y)*(y-this.y)
+    if (Math.sqrt(xDistance2 + yDistance2) < 28) {
+      return true;
+    }
+    return false;
+  }
 }
 
 class SolidEnemy extends Enemy{
@@ -92,5 +100,61 @@ class SolidEnemy extends Enemy{
     bullet.direction = normalizeVector(bullet.direction);
     bullet.sleepIterations = 1;
     bullet.bounce();
+  }
+}
+
+
+class SquareEnemy extends Enemy{
+  constructor(x, y, speed) {
+    super(x, y, speed)
+    this.danger = 5;
+  }
+  draw(ctx) {
+    const pos = convertPosToCanvas(this.x, this.y);
+    ctx.fillStyle = colors.solidEnemy;
+    ctx.beginPath();
+    ctx.rect(
+      pos[0] - (20*gameVars.scale),  // x
+      pos[1] - (20*gameVars.scale),  // y
+      40*gameVars.scale,
+      40*gameVars.scale
+    )
+    ctx.fill();
+  }
+  
+  hitByBullet(bullet) {
+    this.isAlive = false;
+    const newEnemy = new Enemy(this.x, this.y, 40);
+    enemiesToAdd.push(newEnemy);
+    
+    // Reflect bullet
+    const prevBulletX = bullet.previousX;
+    const prevBulletY = bullet.previousY;
+    const left = this.x - 20;
+    const right = this.x + 20;
+    const top = this.y - 20;
+    const bottom = this.y + 20;
+    if (prevBulletX < left || prevBulletX > right)
+      bullet.direction[0] = -bullet.direction[0]
+    if (prevBulletY < top || prevBulletY > bottom)
+      bullet.direction[1] = -bullet.direction[1]
+    bullet.sleepIterations = 2;
+    bullet.bounce();
+  }
+  
+  isInside(x, y) {
+    const left = this.x - 20;
+    const right = this.x + 20;
+    const top = this.y - 20;
+    const bottom = this.y + 20;
+    if (x < left)
+      return false;
+    if (x > right)
+      return false;
+    if (y < top)
+      return false;
+    if (y > bottom)
+      return false;
+    return true;
   }
 }

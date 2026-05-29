@@ -2,6 +2,8 @@ class Bullet {
   constructor(startPos, initDirection, speed, bounces=4, greenChance=0) {
     this.x = startPos[0];
     this.y = startPos[1];
+    this.previousX = this.x;
+    this.previousY = this.y;
     this.direction = initDirection;
     this.speed = speed;
     this.isAlive = true;
@@ -20,6 +22,8 @@ class Bullet {
   }
   updatePosition(deltaTime) {
     const speedVector = normalizeVector(this.direction);
+    this.previousX = this.x;
+    this.previousY = this.y;
     this.x += speedVector[0] * this.speed * deltaTime;
     this.y += speedVector[1] * this.speed * deltaTime;
     if (this.x < 0) {
@@ -85,9 +89,7 @@ class Bullet {
     }
     for (let i = 0; i < enemies.length; i++) {
       const enemy = enemies[i];
-      const xDistance2 = (this.x-enemy.x)*(this.x-enemy.x)
-      const yDistance2 = (this.y-enemy.y)*(this.y-enemy.y)
-      if (Math.sqrt(xDistance2 + yDistance2) < 28) {
+      if (enemy.isInside(this.x, this.y)) {
         enemy.hitByBullet(this);
       }
     }

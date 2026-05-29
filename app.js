@@ -207,11 +207,8 @@ function gameLoop(timestamp) {
       gameVars.enemyTime -= deltaTime;
       if (gameVars.enemyTime < 0) {
         gameVars.wave += 1;
-        const enemiesCount = gameVars.wave;
-        for (let i = 0; i < enemiesCount; i++){
-          generateWave(gameVars.wave);
-          gameVars.enemyTime = getNextWaveTime(gameVars.wave);
-        }
+        generateWave(gameVars.wave);
+        gameVars.enemyTime = getNextWaveTime(gameVars.wave);
       }
       drawUI(ctx);
       if(gameVars.player.immortalityTime > 0){
@@ -266,6 +263,7 @@ function resetGame() {
   enemies = [];
   gameVars.items = [];
   gameVars.wave = 0;
+  gameVars.player.gun = new Pistol();
 }
 
 requestAnimationFrame(gameLoop);
