@@ -7,43 +7,14 @@ function drawUI(ctx) {
     1000 * gameVars.scale,
   );
   
-  ctx.fillStyle = colors.uiHp;
-  for (let i = 0; i < gameVars.player.hp; i++){
-    ctx.beginPath();
-    ctx.arc(
-      gameVars.uiOffsetX + 10*gameVars.scale + (i*50*gameVars.scale),
-      gameVars.offsetY + (50*gameVars.scale),
-      10*gameVars.scale,
-      1 * Math.PI,
-      2 * Math.PI
-    )
-    ctx.arc(
-      gameVars.uiOffsetX + 10*gameVars.scale + (i*50*gameVars.scale)+(20*gameVars.scale),
-      gameVars.offsetY + (50*gameVars.scale),
-      10*gameVars.scale,
-      1 * Math.PI,
-      2 * Math.PI
-    )
-    ctx.fill();
-    ctx.beginPath();
-    ctx.moveTo(
-      gameVars.uiOffsetX + (i*50*gameVars.scale),
-      gameVars.offsetY + (50*gameVars.scale) - gameVars.scale,
-    )
-    ctx.lineTo(
-      gameVars.uiOffsetX + (i*50*gameVars.scale) + (40*gameVars.scale),
-      gameVars.offsetY + (50*gameVars.scale) - gameVars.scale,
-    )
-    ctx.lineTo(
-      gameVars.uiOffsetX + (i*50*gameVars.scale) + (20*gameVars.scale),
-      gameVars.offsetY + (50*gameVars.scale) + (20*gameVars.scale) - gameVars.scale,
-    )
-    ctx.closePath();
-    ctx.fill();
-  }
-  
+  // TODO: show only taken by upgrades
   ctx.font = (40*gameVars.scale)+ 'px Arial';
   ctx.fillStyle = colors.uiWaveText;
   ctx.textAlign = 'left';
-  ctx.fillText('Wave: '+gameVars.wave, gameVars.uiOffsetX+(5*gameVars.scale), gameVars.offsetY + (150 * gameVars.scale));
+  ctx.fillStyle = colors.uiHp;
+  ctx.fillText('HP: ' + gameVars.player.hp, gameVars.uiOffsetX+(5*gameVars.scale), gameVars.offsetY + (50 * gameVars.scale));
+  ctx.fillStyle = colors.uiWaveText;
+  ctx.fillText('Wave: '+gameVars.wave, gameVars.uiOffsetX+(5*gameVars.scale), gameVars.offsetY + (100 * gameVars.scale));
+  ctx.fillText('BPS: '+(1000/gameVars.player.gun.shootDelta), gameVars.uiOffsetX+(5*gameVars.scale), gameVars.offsetY + (150 * gameVars.scale));
+  ctx.fillText('GC: '+(gameVars.player.gun.greenChance), gameVars.uiOffsetX+(5*gameVars.scale), gameVars.offsetY + (200 * gameVars.scale));
 }

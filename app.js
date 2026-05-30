@@ -1,4 +1,4 @@
-const version = '0.0.4'
+const version = '0.0.5'
 const gameCanvas = document.getElementById('gameCanvas');
 const ctx = gameCanvas.getContext('2d');
 
@@ -32,8 +32,7 @@ gameCanvas.addEventListener('click', function(event) {
   if (gameVars.gameState == 'game') {
     let dirVector = [pos[0]-gameVars.player.x, pos[1]-gameVars.player.y];
     dirVector = normalizeVector(dirVector);
-    // TODO safe add
-    gameVars.player.guns[gameVars.player.currentGun].shoot(dirVector);
+    gameVars.player.gun.shoot(dirVector);
   }
   else if (gameVars.gameState == 'menu') {
     for (let i = 0; i < menuButtons.length; i++){
@@ -189,6 +188,7 @@ function draw() {
 }
 
 function gameLoop(timestamp) {
+  gameVars.timestamp = timestamp;
   if (gameVars.gameState == 'game') {
     const deltaTime = (timestamp - lastUpdate) / 1000;
     if (gameVars.transferDelay > 0) {
@@ -207,11 +207,8 @@ function gameLoop(timestamp) {
       gameVars.enemyTime -= deltaTime;
       if (gameVars.enemyTime < 0) {
         gameVars.wave += 1;
-        const enemiesCount = gameVars.wave;
-        for (let i = 0; i < enemiesCount; i++){
-          generateWave(gameVars.wave);
-          gameVars.enemyTime = getNextWaveTime(gameVars.wave);
-        }
+        generateWave(gameVars.wave);
+        gameVars.enemyTime = getNextWaveTime(gameVars.wave);
       }
       drawUI(ctx);
       if(gameVars.player.immortalityTime > 0){
@@ -264,7 +261,9 @@ function resetGame() {
   gameVars.player.hp = 3;
   bullets = [];
   enemies = [];
+  gameVars.items = [];
   gameVars.wave = 0;
+  gameVars.player.gun = new Pistol();
 }
 
 requestAnimationFrame(gameLoop);

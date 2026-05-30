@@ -1,4 +1,5 @@
 let gameVars = {
+  nextId: 0,
   wave: 0,
   enemyTime: 3,
   player: new Player(
@@ -7,10 +8,7 @@ let gameVars = {
     3,  // hp
     80, // size
     200,  // speed
-    [  // guns
-      new BasicPistol(null),
-      new ShotGun(5)
-    ]
+    new Pistol(),
   ),
   items: [],
   newItems: [],

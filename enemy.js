@@ -1,10 +1,16 @@
 class Enemy {
-  constructor(x, y, speed) {
+  constructor(x, y, speed, id=null) {
     this.x = x;
     this.y = y;
     this.speed = speed;
     this.isAlive = true;
     this.danger = 1;
+    if (id === null) {
+      this.id = (gameVars.nextId++);
+    }
+    else {
+      this.id = id;
+    }
   }
   updatePosition(deltaTime) {
     const direction = [
@@ -58,6 +64,14 @@ class Enemy {
     bullet.isAlive = false;
     this.dropItem()
   }
+  isInside(x, y) {
+    const xDistance2 = (x-this.x)*(x-this.x)
+    const yDistance2 = (y-this.y)*(y-this.y)
+    if (Math.sqrt(xDistance2 + yDistance2) < 28) {
+      return true;
+    }
+    return false;
+  }
 }
 
 class SolidEnemy extends Enemy{
@@ -81,7 +95,7 @@ class SolidEnemy extends Enemy{
   
   hitByBullet(bullet) {
     this.isAlive = false;
-    const newEnemy = new Enemy(this.x, this.y, 40);
+    const newEnemy = new Enemy(this.x, this.y, 40, this.id);
     enemiesToAdd.push(newEnemy);
     
     // Reflect bullet
@@ -91,6 +105,63 @@ class SolidEnemy extends Enemy{
     bullet.direction[1] = bullet.direction[1] - 2 * dot * n[1];
     bullet.direction = normalizeVector(bullet.direction);
     bullet.sleepIterations = 1;
-    bullet.bounces -= 1;
+    bullet.bounce();
+  }
+}
+
+
+class SquareEnemy extends Enemy{
+  constructor(x, y, speed) {
+    super(x, y, speed)
+    this.danger = 5;
+  }
+  draw(ctx) {
+    const pos = convertPosToCanvas(this.x, this.y);
+    ctx.fillStyle = colors.solidEnemy;
+    ctx.beginPath();
+    ctx.rect(
+      pos[0] - (25*gameVars.scale),  // x
+      pos[1] - (25*gameVars.scale),  // y
+      45*gameVars.scale,
+      45*gameVars.scale
+    )
+    ctx.fill();
+  }
+  
+  hitByBullet(bullet) {
+    this.isAlive = false;
+    const newEnemy = new Enemy(this.x, this.y, 40, this.id);
+    enemiesToAdd.push(newEnemy);
+    
+    // Reflect bullet
+    const prevBulletX = bullet.previousX;
+    const prevBulletY = bullet.previousY;
+    const left = this.x - 20;
+    const right = this.x + 20;
+    const top = this.y - 20;
+    const bottom = this.y + 20;
+    if (prevBulletX < left || prevBulletX > right)
+      bullet.direction[0] = -bullet.direction[0]
+    if (prevBulletY < top || prevBulletY > bottom)
+      bullet.direction[1] = -bullet.direction[1]
+    bullet.sleepIterations = 10;
+    bullet.lastHitEnemyId = this.id;
+    bullet.bounce();
+  }
+  
+  isInside(x, y) {
+    const left = this.x - 25;
+    const right = this.x + 25;
+    const top = this.y - 25;
+    const bottom = this.y + 25;
+    if (x < left)
+      return false;
+    if (x > right)
+      return false;
+    if (y < top)
+      return false;
+    if (y > bottom)
+      return false;
+    return true;
   }
 }

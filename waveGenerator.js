@@ -1,10 +1,14 @@
 const enemiesClasses = [
   Enemy,
-  SolidEnemy
+  SolidEnemy,
+  SquareEnemy
 ];
 
 function generateWave(waveNum) {
-  const dangerLvl = Math.log(waveNum + 1) / 2;
+  const x = waveNum;
+  const dangerLvl = 2 * x + 10 * Math.log(x);
+  console.log('----------------------------' + waveNum);
+  console.log(dangerLvl);
   let currentDangerLvl = 0;
   while (currentDangerLvl < dangerLvl) {
     let enemyX = Math.random() * 1000;
@@ -21,6 +25,8 @@ function generateWave(waveNum) {
     );
     enemies.push(enemy);
     currentDangerLvl += enemy.danger;
+    console.log('e ' + enemy.danger);
+    console.log('e d' + currentDangerLvl);
   }
 }
 
