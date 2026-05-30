@@ -1,4 +1,5 @@
 let gameVars = {
+  nextId: 0,
   wave: 0,
   enemyTime: 3,
   player: new Player(

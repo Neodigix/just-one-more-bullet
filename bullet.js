@@ -11,6 +11,7 @@ class Bullet {
     this.sleepIterations = 0;
     this.greenChance = greenChance;
     this.bulletType = 'red';
+    this.lastHitEnemyId = null;
   }
   bounce() {
     this.bounces -= 1;
@@ -90,7 +91,9 @@ class Bullet {
     for (let i = 0; i < enemies.length; i++) {
       const enemy = enemies[i];
       if (enemy.isInside(this.x, this.y)) {
-        enemy.hitByBullet(this);
+        if (this.sleepIterations <= 0 || this.lastHitEnemyId != enemy.id) {
+          enemy.hitByBullet(this);
+        }
       }
     }
   }

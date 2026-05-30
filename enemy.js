@@ -1,10 +1,16 @@
 class Enemy {
-  constructor(x, y, speed) {
+  constructor(x, y, speed, id=null) {
     this.x = x;
     this.y = y;
     this.speed = speed;
     this.isAlive = true;
     this.danger = 1;
+    if (id === null) {
+      this.id = (gameVars.nextId++);
+    }
+    else {
+      this.id = id;
+    }
   }
   updatePosition(deltaTime) {
     const direction = [
@@ -89,7 +95,7 @@ class SolidEnemy extends Enemy{
   
   hitByBullet(bullet) {
     this.isAlive = false;
-    const newEnemy = new Enemy(this.x, this.y, 40);
+    const newEnemy = new Enemy(this.x, this.y, 40, this.id);
     enemiesToAdd.push(newEnemy);
     
     // Reflect bullet
@@ -114,17 +120,17 @@ class SquareEnemy extends Enemy{
     ctx.fillStyle = colors.solidEnemy;
     ctx.beginPath();
     ctx.rect(
-      pos[0] - (20*gameVars.scale),  // x
-      pos[1] - (20*gameVars.scale),  // y
-      40*gameVars.scale,
-      40*gameVars.scale
+      pos[0] - (25*gameVars.scale),  // x
+      pos[1] - (25*gameVars.scale),  // y
+      45*gameVars.scale,
+      45*gameVars.scale
     )
     ctx.fill();
   }
   
   hitByBullet(bullet) {
     this.isAlive = false;
-    const newEnemy = new Enemy(this.x, this.y, 40);
+    const newEnemy = new Enemy(this.x, this.y, 40, this.id);
     enemiesToAdd.push(newEnemy);
     
     // Reflect bullet
@@ -138,15 +144,16 @@ class SquareEnemy extends Enemy{
       bullet.direction[0] = -bullet.direction[0]
     if (prevBulletY < top || prevBulletY > bottom)
       bullet.direction[1] = -bullet.direction[1]
-    bullet.sleepIterations = 2;
+    bullet.sleepIterations = 10;
+    bullet.lastHitEnemyId = this.id;
     bullet.bounce();
   }
   
   isInside(x, y) {
-    const left = this.x - 20;
-    const right = this.x + 20;
-    const top = this.y - 20;
-    const bottom = this.y + 20;
+    const left = this.x - 25;
+    const right = this.x + 25;
+    const top = this.y - 25;
+    const bottom = this.y + 25;
     if (x < left)
       return false;
     if (x > right)
