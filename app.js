@@ -1,4 +1,4 @@
-const version = '0.0.4'
+const version = '0.0.5'
 const gameCanvas = document.getElementById('gameCanvas');
 const ctx = gameCanvas.getContext('2d');
 
