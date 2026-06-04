@@ -1,4 +1,4 @@
-const version = '0.0.5'
+const version = '0.0.6'
 const gameCanvas = document.getElementById('gameCanvas');
 const ctx = gameCanvas.getContext('2d');
 
@@ -68,6 +68,8 @@ gameCanvas.addEventListener("mousemove", (e) => {
   const mousePos = convertPosFromCanvas(x, y);
   mouseX = mousePos[0];
   mouseY = mousePos[1];
+  gameVars.mouseX = mouseX;
+  gameVars.mouseY = mouseY;
 });
 
 let lastUpdate = 0;
@@ -242,6 +244,7 @@ function gameLoop(timestamp) {
     const deltaTime = (timestamp - lastUpdate) / 1000;
     if (gameVars.transferDelay > 0) {
       gameVars.transferDelay -= deltaTime;
+      gameVars.view.drawView(ctx);
     }
     else {
       lastUpdate = timestamp;
@@ -258,6 +261,7 @@ function gameLoop(timestamp) {
 function resetGame() {
   gameVars.player.x = 500;
   gameVars.player.y = 500;
+  gameVars.player.dropChance = 10;
   gameVars.player.hp = 3;
   bullets = [];
   enemies = [];

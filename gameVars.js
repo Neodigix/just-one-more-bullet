@@ -25,5 +25,9 @@ let gameVars = {
   uiOffsetX: 0,
   scale: 1,
   
-  soundPlayer: new SoundPlayer()
+  soundPlayer: new SoundPlayer(),
+
+  // Mouse
+  mouseX: 0,
+  mouseY: 0
 };

@@ -1,5 +1,5 @@
 class Pistol {
-  constructor(bps=1, greenChance=10) {
+  constructor(bps=1, greenChance=2) {
     this.bps = bps;
     this.shootDelta = 1000 / bps;
     this.lastShoot = 0;
