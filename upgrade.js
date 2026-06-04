@@ -4,7 +4,11 @@ class UpgradeView{
       600-250+100, 500, 500, 100,
       'Upgrade gun speed',
       function () {
-        gameVars.player.gun.setBps(gameVars.player.gun.bps + 0.05);
+        gameVars.player.gun.setBps(
+          Math.round(100 * (gameVars.player.gun.bps + 0.05))
+          /
+          100
+        );
         gameVars.transferDelay = 20;
         gameVars.gameState = 'game';
       }
