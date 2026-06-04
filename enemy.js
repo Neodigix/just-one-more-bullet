@@ -61,8 +61,15 @@ class Enemy {
   }
   hitByBullet(bullet) {
     this.isAlive = false;
-    bullet.isAlive = false;
     this.dropItem()
+    // Reflect bullet
+    const n = normalizeVector([bullet.x - this.x, bullet.y - this.y]);
+    const dot = bullet.direction[0] * n[0] + bullet.direction[1] * n[1];
+    bullet.direction[0] = bullet.direction[0] - 2 * dot * n[0];
+    bullet.direction[1] = bullet.direction[1] - 2 * dot * n[1];
+    bullet.direction = normalizeVector(bullet.direction);
+    bullet.sleepIterations = 1;
+    bullet.bounce();
   }
   isInside(x, y) {
     const xDistance2 = (x-this.x)*(x-this.x)
@@ -152,6 +159,26 @@ class SquareEnemy extends Enemy{
     if (y > bottom)
       return false;
     return true;
+  }
+  
+  hitByBullet(bullet) {
+    this.isAlive = false;
+    this.dropItem()
+    
+    // Reflect bullet
+    const prevBulletX = bullet.previousX;
+    const prevBulletY = bullet.previousY;
+    const left = this.x - 20;
+    const right = this.x + 20;
+    const top = this.y - 20;
+    const bottom = this.y + 20;
+    if (prevBulletX < left || prevBulletX > right)
+      bullet.direction[0] = -bullet.direction[0]
+    if (prevBulletY < top || prevBulletY > bottom)
+      bullet.direction[1] = -bullet.direction[1]
+    bullet.sleepIterations = 3;
+    bullet.lastHitEnemyId = this.id;
+    bullet.bounce();
   }
 }
 

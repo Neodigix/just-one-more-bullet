@@ -9,7 +9,6 @@ function drawUI(ctx) {
   
   // TODO: show only taken by upgrades
   ctx.font = (40*gameVars.scale)+ 'px Arial';
-  ctx.fillStyle = colors.uiWaveText;
   ctx.textAlign = 'left';
   ctx.fillStyle = colors.uiHp;
   ctx.fillText('HP: ' + gameVars.player.hp, gameVars.uiOffsetX+(5*gameVars.scale), gameVars.offsetY + (50 * gameVars.scale));

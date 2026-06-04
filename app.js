@@ -68,6 +68,8 @@ gameCanvas.addEventListener("mousemove", (e) => {
   const mousePos = convertPosFromCanvas(x, y);
   mouseX = mousePos[0];
   mouseY = mousePos[1];
+  gameVars.mouseX = mouseX;
+  gameVars.mouseY = mouseY;
 });
 
 let lastUpdate = 0;
@@ -259,6 +261,7 @@ function gameLoop(timestamp) {
 function resetGame() {
   gameVars.player.x = 500;
   gameVars.player.y = 500;
+  gameVars.player.dropChance = 10;
   gameVars.player.hp = 3;
   bullets = [];
   enemies = [];

@@ -66,12 +66,12 @@ class UpgradeView{
             this.buttons.push(
               new MenuButton(
                 currPosition[0], currPosition[1], currPosition[2], currPosition[3],
-                '+5 GC',
+                '+1 GC',
                 function () {
                   if (gameVars.transferDelay > 0) {
                     return;
                   }
-                  gameVars.player.gun.greenChance += 5;
+                  gameVars.player.gun.greenChance += 1;
                   gameVars.transferDelay = 20;
                   gameVars.gameState = 'game';
                 }
@@ -82,12 +82,12 @@ class UpgradeView{
             this.buttons.push(
               new MenuButton(
                 currPosition[0], currPosition[1], currPosition[2], currPosition[3],
-                '+2 DC',
+                '+1 DC',
                 function () {
                   if (gameVars.transferDelay > 0) {
                     return;
                   }
-                  gameVars.player.dropChance += 2;
+                  gameVars.player.dropChance += 1;
                   gameVars.transferDelay = 20;
                   gameVars.gameState = 'game';
                 }
@@ -102,6 +102,33 @@ class UpgradeView{
     drawUI(ctx);
     for (let i = 0; i < this.buttons.length; i++){
       this.buttons[i].draw(ctx);
+    }
+    this.drawHint(ctx);
+  }
+  drawHint(ctx) {
+    const texts = [
+      'Hit points left',
+      'Which wave are you currently in',
+      'How many bullets can you shot',
+      'What is the chance that bullet will turn\ngreen after bounce\nGreen bullents can\'t hurt player',
+      'What is the chance that killed enemy\nwill drop item'
+    ]
+    
+    if (gameVars.mouseX < 0) {
+      const hoveredItem = Math.floor(gameVars.mouseY / 50);
+      if (hoveredItem < 5) {
+        ctx.font = (40*gameVars.scale)+ 'px Arial';
+        ctx.fillStyle = colors.uiWaveText;
+        ctx.textAlign = 'left';
+        const splitText = texts[hoveredItem].split('\n');
+        for (let i = 0; i < splitText.length; i++){
+          ctx.fillText(
+            splitText[i],
+            gameVars.uiOffsetX + (300 * gameVars.scale),
+            gameVars.offsetY + (50 * gameVars.scale) * (i + 1) 
+          );
+        }
+      }
     }
   }
 }
