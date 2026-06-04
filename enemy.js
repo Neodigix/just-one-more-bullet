@@ -54,7 +54,7 @@ class Enemy {
     }
   }
   dropItem() {
-    if (getRandomInt(0, 12) == 0) {
+    if (getRandomInt(0, 100) < gameVars.player.dropChance) {
       const newItem = new Item([this.x, this.y]);
       gameVars.newItems.push(newItem);
     }

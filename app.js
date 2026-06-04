@@ -242,6 +242,7 @@ function gameLoop(timestamp) {
     const deltaTime = (timestamp - lastUpdate) / 1000;
     if (gameVars.transferDelay > 0) {
       gameVars.transferDelay -= deltaTime;
+      gameVars.view.drawView(ctx);
     }
     else {
       lastUpdate = timestamp;

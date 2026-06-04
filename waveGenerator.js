@@ -24,8 +24,6 @@ function generateWave(waveNum) {
     );
     enemies.push(enemy);
     currentDangerLvl += enemy.danger;
-    console.log('e ' + enemy.danger);
-    console.log('e d' + currentDangerLvl);
   }
 }
 

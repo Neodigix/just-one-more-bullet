@@ -24,6 +24,7 @@ colors = {
   // Menu
   menuBackground: colorsPalete.black,
   menuButtonBackground: colorsPalete.white,
+  menuButtonBackgroundTransfer: colorsPalete.white2,
   menuButtonBackgroundHover: colorsPalete.red,
   menuButtonText: colorsPalete.black,
   menuGameTitle: colorsPalete.white,

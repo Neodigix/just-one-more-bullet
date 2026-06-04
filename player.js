@@ -1,5 +1,5 @@
 class Player{
-  constructor(x, y, hp, size, speed, gun) {
+  constructor(x, y, hp, size, speed, gun, dropChance=10) {
     this.x = x;
     this.y = y;
     this.hp = hp;
@@ -7,6 +7,7 @@ class Player{
     this.speed = speed;
     this.gun = gun;
     this.immortalityTime = 0;
+    this.dropChance = dropChance;
   }
   draw(ctx) {
     const playerPos = convertPosToCanvas(this.x, this.y);

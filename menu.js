@@ -12,6 +12,9 @@ class MenuButton{
     if (this.isHovered()) {
       ctx.fillStyle = colors.menuButtonBackgroundHover;
     }
+    if (gameVars.transferDelay > 0) {
+      ctx.fillStyle = colors.menuButtonBackgroundTransfer;
+    }
     ctx.fillRect(
       gameVars.uiOffsetX+(this.x*gameVars.scale),
       gameVars.offsetY+(this.y*gameVars.scale),
@@ -40,7 +43,7 @@ class MenuButton{
   }
 }
 
-const menuBottonsOffset = 300;
+const menuBottonsOffset = 450;
 const menuButtons = [
   new MenuButton(
     600-250, 10+menuBottonsOffset, 500, 100,
@@ -50,11 +53,11 @@ const menuButtons = [
       gameVars.transferDelay = 20;
       gameVars.gameState = 'game';
     }
-  ),
-  new MenuButton(
-    600-250, 10+150+menuBottonsOffset, 500, 100,
-    'CREDITS',
   )
+  // new MenuButton(
+  //   600-250, 10+150+menuBottonsOffset, 500, 100,
+  //   'CREDITS',
+  // )
 ]
 
 function drawMenu(ctx, deltaTime) {
@@ -68,12 +71,12 @@ function drawMenu(ctx, deltaTime) {
   
   // Game title
   ctx.textAlign = 'center';
-  ctx.font = (40*gameVars.scale)+ 'px Arial';
+  ctx.font = (100*gameVars.scale)+ 'px Arial';
   ctx.fillStyle = colors.menuGameTitle;
   ctx.fillText(
     'Just One More Bullet',
     gameVars.uiOffsetX + (600*gameVars.scale),
-    gameVars.offsetY + (60*gameVars.scale)
+    gameVars.offsetY + (200*gameVars.scale)
   );
   
   // Buttons
@@ -84,11 +87,11 @@ function drawMenu(ctx, deltaTime) {
   
   // Game version
   ctx.textAlign = 'left';
-  ctx.font = (40*gameVars.scale)+ 'px Arial';
+  ctx.font = (20*gameVars.scale)+ 'px Arial';
   ctx.fillStyle = colors.menuGameVersion;
   ctx.fillText(
     'Game version: ' + version,
     gameVars.uiOffsetX + (10*gameVars.scale),
-    gameVars.offsetY + (960*gameVars.scale)
+    gameVars.offsetY + (980*gameVars.scale)
   );
 }

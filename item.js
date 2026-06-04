@@ -22,6 +22,7 @@ class Item {
     const newUpgradeView = new UpgradeView();
     gameVars.gameState = 'upgrade';
     gameVars.view = newUpgradeView;
+    gameVars.transferDelay = 40;
   }
   checkPickup() {
     if (this.getPlayerDistance() <= 35) {
