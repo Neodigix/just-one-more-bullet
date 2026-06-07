@@ -9,7 +9,7 @@ class Pistol {
     this.bps = bps;
     this.shootDelta = 1000 / bps;
   }
-  draw(ctx) {
+  draw(ctx, player) {
     const playerPos = convertPosToCanvas(gameVars.player.x, gameVars.player.y);
     ctx.beginPath();
     const lookingVect = getLookingDirection();
@@ -17,6 +17,9 @@ class Pistol {
     ctx.translate(playerPos[0], playerPos[1]);
     ctx.rotate(-angle);
     ctx.fillStyle = colors.gun;
+    if(player.immortalityTime > 0){
+      ctx.fillStyle = colors.gunImmortal;
+    }
     ctx.fillRect(-5*gameVars.scale, 20*gameVars.scale, 10 * gameVars.scale, 20 * gameVars.scale);
     ctx.restore();
   }

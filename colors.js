@@ -17,6 +17,7 @@ colors = {
   player: colorsPalete.white,
   playerImmortal: colorsPalete.white2,
   gun: colorsPalete.white,
+  gunImmortal: colorsPalete.white2,
   enemy: colorsPalete.red2,
   solidEnemy: colorsPalete.red,
   item: colorsPalete.yellow,

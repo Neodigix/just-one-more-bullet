@@ -263,6 +263,7 @@ function resetGame() {
   gameVars.player.y = 500;
   gameVars.player.dropChance = 10;
   gameVars.player.hp = 3;
+  gameVars.player.immortalityTime = 0;
   bullets = [];
   enemies = [];
   gameVars.items = [];

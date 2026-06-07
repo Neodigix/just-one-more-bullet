@@ -32,6 +32,6 @@ class Player{
     const angle = Math.atan2(lookingVect[0], lookingVect[1]);
     
     ctx.save();
-    this.gun.draw(ctx);
+    this.gun.draw(ctx, this);
   }
 }
