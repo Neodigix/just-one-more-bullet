@@ -37,7 +37,7 @@ gameCanvas.addEventListener('click', function(event) {
   else if (gameVars.gameState == 'menu') {
     for (let i = 0; i < menuButtons.length; i++){
       const button = menuButtons[i];
-      gameVars.soundPlayer.playClick();
+      // gameVars.soundPlayer.playClick();
       if (button.isHovered() && button.onClickFunction !== null) {
         button.onClickFunction();
       }

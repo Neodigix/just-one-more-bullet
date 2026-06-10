@@ -5,20 +5,8 @@ class UpgradeView{
       [600 - 250 + 100, 300, 500, 100],
       [600 - 250 + 100, 700, 500, 100],
     ]
-    const button4 = new MenuButton(
-      600-250+100, 700, 500, 100,
-      '+2 DC',
-      function () {
-        if (gameVars.transferDelay > 0) {
-          return;
-        }
-        gameVars.player.dropChance += 5;
-        gameVars.transferDelay = 20;
-        gameVars.gameState = 'game';
-      }
-    );
     this.buttons = [];
-    const upgradeNums = [0, 1, 2, 3];
+    const upgradeNums = [0, 1, 2, 3, 4];
     for (let i = 0; i < 3; i++){
       const currPosition = this.buttonPositions[i];
       
@@ -94,6 +82,22 @@ class UpgradeView{
               )
             );
           break;
+          case 4:
+            this.buttons.push(
+              new MenuButton(
+                currPosition[0], currPosition[1], currPosition[2], currPosition[3],
+                '+1 FC',
+                function () {
+                  if (gameVars.transferDelay > 0) {
+                    return;
+                  }
+                  gameVars.player.gun.blueChance += 1;
+                  gameVars.transferDelay = 20;
+                  gameVars.gameState = 'game';
+                }
+              )
+            );
+          break;
       }
     }
   }
@@ -111,6 +115,7 @@ class UpgradeView{
       'Which wave are you currently in',
       'How many bullets can you shot',
       'What is the chance that bullet will turn\ngreen after bounce\nGreen bullents can\'t hurt player',
+      'What is the chance that bullet will turn\nblue after bounce\nBlue bullents freeze enemies',
       'What is the chance that killed enemy\nwill drop item'
     ]
     

@@ -1,9 +1,10 @@
 class Pistol {
-  constructor(bps=1, greenChance=2) {
+  constructor(bps=1, greenChance=25, blueChance=25) {
     this.bps = bps;
     this.shootDelta = 1000 / bps;
     this.lastShoot = 0;
     this.greenChance = greenChance;
+    this.blueChance = blueChance;
   }
   setBps(bps) {
     this.bps = bps;
@@ -30,8 +31,9 @@ class Pistol {
       const newBullet = new Bullet([
         gameVars.player.x + dirVector[0] * 30,
         gameVars.player.y + dirVector[1] * 30
-      ], dirVector, 400, 4, this.greenChance);
+      ], dirVector, 400, 4, this.greenChance, this.blueChance);
       bullets.push(newBullet);
+      gameVars.soundPlayer.playClick();
     }
   }
 }

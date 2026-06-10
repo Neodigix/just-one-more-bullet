@@ -1,9 +1,10 @@
 class Enemy {
-  constructor(x, y, speed, id=null) {
+  constructor(x, y, speed, id=null, freezeTime=0) {
     this.x = x;
     this.y = y;
     this.speed = speed;
     this.isAlive = true;
+    this.freezeTime = freezeTime;
     this.danger = 1;
     if (id === null) {
       this.id = (gameVars.nextId++);
@@ -13,6 +14,10 @@ class Enemy {
     }
   }
   updatePosition(deltaTime) {
+    if (this.freezeTime > 0) {
+      this.freezeTime -= deltaTime;
+      return;
+    }
     const direction = [
       gameVars.player.x-this.x,
       gameVars.player.y-this.y,
@@ -112,7 +117,11 @@ class SolidEnemy extends Enemy{
   
   hitByBullet(bullet) {
     this.isAlive = false;
-    const newEnemy = new Enemy(this.x, this.y, 40, this.id);
+    let freezeTime = 0;
+    if (bullet.bulletType == 'blue') {
+      freezeTime = 1000;
+    }
+    const newEnemy = new Enemy(this.x, this.y, 40, this.id, freezeTime);
     enemiesToAdd.push(newEnemy);
     
     // Reflect bullet
@@ -128,8 +137,8 @@ class SolidEnemy extends Enemy{
 
 
 class SquareEnemy extends Enemy{
-  constructor(x, y, speed) {
-    super(x, y, speed)
+  constructor(x, y, speed, id=null, freezeTime=0) {
+    super(x, y, speed, id, freezeTime)
     this.danger = 2;
   }
   draw(ctx) {
@@ -211,7 +220,11 @@ class SolidSquareEnemy extends SquareEnemy{
   
   hitByBullet(bullet) {
     this.isAlive = false;
-    const newEnemy = new SquareEnemy(this.x, this.y, 40, this.id);
+    let freezeTime = 0;
+    if (bullet.bulletType == 'blue') {
+      freezeTime = 1000;
+    }
+    const newEnemy = new SquareEnemy(this.x, this.y, 40, this.id, freezeTime);
     enemiesToAdd.push(newEnemy);
     
     // Reflect bullet

@@ -1,5 +1,5 @@
 class Bullet {
-  constructor(startPos, initDirection, speed, bounces=4, greenChance=0) {
+  constructor(startPos, initDirection, speed, bounces=4, greenChance=0, blueChance=0) {
     this.x = startPos[0];
     this.y = startPos[1];
     this.previousX = this.x;
@@ -10,14 +10,24 @@ class Bullet {
     this.bounces = bounces;
     this.sleepIterations = 0;
     this.greenChance = greenChance;
+    // Probability fix vvv
+    // fixedGreenChance = targetBlueChance/(100%/(100%-greenChance))
+    this.blueChance = (blueChance/100)/(1-(greenChance/100)) * 100;
     this.bulletType = 'red';
     this.lastHitEnemyId = null;
+    this.bounces += 1;
+    this.bounce();
   }
   bounce() {
     this.bounces -= 1;
     if (this.bulletType == 'red') {
       if (getRandomInt(0, 100) < this.greenChance) {
         this.bulletType = 'green';
+     }
+    }
+    if (this.bulletType == 'red') {
+      if (getRandomInt(0, 100) < this.blueChance) {
+        this.bulletType = 'blue';
      }
     }
   }
@@ -68,6 +78,18 @@ class Bullet {
       2 * Math.PI  // ending angle
     )
     ctx.fill();
+    if (this.bulletType == 'blue') {
+      ctx.fillStyle = colors.bulletBlue;
+      ctx.beginPath();
+      ctx.arc(
+        pos[0],  // x
+        pos[1],  // y
+        2*gameVars.scale,  // radius
+        0,  // starting angle
+        2 * Math.PI  // ending angle
+      )
+      ctx.fill();
+    }
   }
   isDead() {
     return !this.isAlive;
@@ -81,7 +103,7 @@ class Bullet {
     if (this.bulletType == 'red') {
       if (this.getPlayerDistance() <= 28) {
         if(gameVars.player.immortalityTime <= 0){
-          gameVars.soundPlayer.playClick();
+          // gameVars.soundPlayer.playClick();
           gameVars.player.hp -= 1;
           this.isAlive = false;
           gameVars.player.immortalityTime = 1000;
