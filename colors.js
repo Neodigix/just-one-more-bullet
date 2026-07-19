@@ -6,7 +6,7 @@ colorsPalete = {
   green: '#00ff00',
   black: 'black',
   yellow: '#e5d600',
-  blue: '#0000aa'
+  blue: '#0000ff'
 };
 
 colors = {

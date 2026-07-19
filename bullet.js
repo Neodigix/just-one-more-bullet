@@ -13,7 +13,11 @@ class Bullet {
     // Probability fix vvv
     // fixedGreenChance = targetBlueChance/(100%/(100%-greenChance))
     this.blueChance = (blueChance/100)/(1-(greenChance/100)) * 100;
+    
     this.bulletType = 'red';
+    this.currentColor = colors.bullet;
+    this.lastColorChange = 0;
+    
     this.lastHitEnemyId = null;
     this.bounces += 1;
     this.bounce();
@@ -23,11 +27,13 @@ class Bullet {
     if (this.bulletType == 'red') {
       if (getRandomInt(0, 100) < this.greenChance) {
         this.bulletType = 'green';
+        this.currentColor = colors.bulletGreen;
      }
     }
     if (this.bulletType == 'red') {
       if (getRandomInt(0, 100) < this.blueChance) {
         this.bulletType = 'blue';
+        this.currentColor = colors.bulletBlue;
      }
     }
   }
@@ -62,13 +68,23 @@ class Bullet {
     else {
       this.checkCollision();
     }
+    if (this.bulletType == 'blue') {
+      this.lastColorChange += deltaTime; 
+      if (this.lastColorChange > 0.4) {
+        this.lastColorChange -= 0.4;
+        if (this.currentColor == colors.bullet) {
+          this.currentColor = colors.bulletBlue;
+        }
+        else {
+          this.currentColor = colors.bullet;
+        }
+      }
+    }
   }
   draw(ctx) {
     const pos = convertPosToCanvas(this.x, this.y);
     ctx.fillStyle = colors.bullet;
-    if (this.bulletType == 'green') {
-      ctx.fillStyle = colors.bulletGreen;
-    }
+    ctx.fillStyle = this.currentColor;
     ctx.beginPath();
     ctx.arc(
       pos[0],  // x
@@ -78,18 +94,6 @@ class Bullet {
       2 * Math.PI  // ending angle
     )
     ctx.fill();
-    if (this.bulletType == 'blue') {
-      ctx.fillStyle = colors.bulletBlue;
-      ctx.beginPath();
-      ctx.arc(
-        pos[0],  // x
-        pos[1],  // y
-        2*gameVars.scale,  // radius
-        0,  // starting angle
-        2 * Math.PI  // ending angle
-      )
-      ctx.fill();
-    }
   }
   isDead() {
     return !this.isAlive;
